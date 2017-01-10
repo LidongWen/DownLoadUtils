@@ -10,6 +10,9 @@ compile 'com.github.LidongWen:DownLoadUtils:1.0.1'
 * 继续下载
 * 重新下载
 * 文件 DB 操作
+* 获取下载列表（All）
+* 获取下载列表（暂停||下载中 未完成列表）
+* 获取下载列表（已完成列表）
 
 ##初始化
 ```java
@@ -59,4 +62,17 @@ DownloadUtils.ReDownLoad(MainActivity.this, item, otherMessage);
 DownloadUtils.getFileDB().selectByPrimaryKey();
 List list= DownloadUtils.getFileDB().getQueryBuilder().where(FileInfoDao.Properties.Id.eq(threeModel.getId())).list();
 //等等一系列的数据库操作
+```
+## 获取下载列表
+```java
+DownloadUtils.getAllFileInfos();
+```
+
+## 获取下载列表（暂停||下载中 未完成列表）
+```java
+DownloadUtils.getFileInfosByDownLoading();
+```
+* 获取下载列表（已完成列表）
+```java
+DownloadUtils.getFileInfosByFinished();
 ```
