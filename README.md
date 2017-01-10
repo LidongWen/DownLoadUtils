@@ -3,6 +3,7 @@
  ## 用法
  * Android Studio
 
+
  	```java
  	compile 'com.github.LidongWen:DownLoadUtils:1.1.0'
  	```
