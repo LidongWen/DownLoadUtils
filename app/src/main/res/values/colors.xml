@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#7ACCFE</color>
+    <color name="colorPrimaryDark">#72BFEF</color>
+    <color name="colorAccent">#ff4081</color>
+    <color name="icons">#FFFFFF</color>
+
+    <color name="divider">#B6B6B6</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="white">#ffffff</color>
+    <color name="white_a">#fff9f9f9</color>
+    <color name="gray_a">#fafafa</color>
+    <color name="gray_b">#cccccc</color>
+    <color name="gray_c">#F2F2F2</color>
+    <color name="gray_d">#e7e7e7</color>
+    <color name="gray_e">#acacac</color>
+    <color name="gray_f">#929292</color>
+    <color name="gray_g">#f5f5f5</color>
+    <color name="gray_j">#ffECEFF2</color>
+
+
+    <color name="gray_h">#ededed</color>
+    <color name="gray_i">#ffb9b9b9</color>
+    <color name="gray_k">#e5e5e5</color>
+    <color name="gray_l">#E0E0E0</color>
+    <color name="gray_m">#999999</color>
+    <color name="gray_dark">#ff454545</color>
+    <color name="gray_n">#979797</color>
+    <color name="color_333333">#333333</color>
+
+    <color name="black">#ff000000</color>
+    <color name="black_a">#3D3D3D</color>
+
+    <color name="blue_grey">#ff303030</color>
+    <color name="blue_grey_a">#ffd2d2d2</color>
+    <color name="blue_grey_b">#ffd9d9d9</color>
+    <color name="blue">#3c93dd</color>
+    <color name="blue_a">#3a94db</color>
+    <color name="blue_b">#3da4fc</color>
+    <color name="blue_d">#e2fcfa</color>
+    <color name="blue_f">#0097ff</color>
+
+    <color name="red_dark">#ffbc494d</color>
+    <color name="red_dark_a">#ffcc3131</color>
+    <color name="red">#fb0404</color>
+    <color name="red_a">#f17800</color>
+    <color name="red_b">#ff0000</color>
+    <color name="red_c">#fff3e2</color>
+    <color name="red_d">#fff3e1</color>
+    <color name="red_f">#facd89</color>
+    <color name="red_e">#C60126</color>
+    <color name="red_g">#C80025</color>
+    <color name="brown">#ffcdcdcd</color>
+
+    <!-- Voip音视频文字 -->
+    <color name="ec_voip_interface_text_color">#bababa</color>
+    <color name="white_color_disable">#7fffffff</color>
+    <color name="ec_normal_text_color_disable">#7f353535</color>
+    <color name="normal_text_color">#ff353535</color>
+    <color name="ec_voip_talk_bg_color">#ff404040</color>
+    <color name="ec_grey_btn_color_normal">#fff1f1f1</color>
+    <color name="ec_grey_btn_color_pressed">#ffd8d8d8</color>
+    <color name="ec_grey_btn_color_disable">#7fd8d8d8</color>
+    <color name="ec_grey_btn_stroke_color_normal">#ffbebebe</color>
+    <color name="ec_grey_btn_stroke_color_pressed">#ff9e9e9e</color>
+    <color name="ec_grey_btn_stroke_color_disable">#7f9e9e9e</color>
+    <color name="voip_interface_text_color">#bababa</color>
+    <color name="normal_text_color_disable">#7f353535</color>
+    <color name="red_btn_color_normal">#ffff5454</color>
+    <color name="red_btn_color_pressed">#ffd24242</color>
+    <color name="red_btn_color_disable">#7fff5454</color>
+    <color name="ccp_green_alpha">#7f00B486</color>
+    <item name="green_btn_color_disable" type="color">@color/ccp_green_alpha</item>
+    <color name="green_btn_color_pressed">#ff298409</color>
+
+    <color name="red_light">#ffff4444</color>
+    <color name="green_light">#ff99cc00</color>
+    <color name="orange_light">#ffffbb33</color>
+    <color name="blue_light">#ff33b5e5</color>
+
+    <color name="bg_item_normal_state">#fff0f0f0</color>
+    <color name="bg_item_dragging_state">#ffffdddd</color>
+    <color name="bg_item_dragging_active_state">#ffff9999</color>
+    <color name="bg_item_swiping_state">#ffddddff</color>
+    <color name="bg_item_swiping_active_state">#ff9999ff</color>
+
+    <color name="bg_group_item_normal_state">#ffddffdd</color>
+    <color name="bg_group_item_normal_pressed_state">#ff99cc99</color>
+    <color name="bg_group_item_expanded_state">#FFFFFF</color>
+    <color name="bg_group_item_expanded_pressed_state">#FFFFFF</color>
+    <color name="bg_group_item_dragging_state">#ffeeccff</color>
+    <color name="bg_group_item_dragging_active_state">#ffee99ff</color>
+    <color name="bg_group_item_swiping_state">#ffddccff</color>
+    <color name="bg_group_item_swiping_active_state">#ffbb99ff</color>
+
+    <color name="bg_swipe_item_neutral">#ffffffff</color>
+    <color name="bg_swipe_item_left">#fff9930d</color>
+    <color name="bg_swipe_item_right">#ff2f8b2a</color>
+    <color name="bg_swipe_group_item_left">#fff45f30</color>
+    <color name="bg_swipe_group_item_right">#ff295db3</color>
+    <color name="bg_warning">#fffde1b6</color>
+    <color name="text_warning">#ffb8956b</color>
+
+
+    <color name="navigation_checked_news_text_color">#FF4E3E80</color>
+    <color name="navigation_checked_picture_text_color">#FFBA4A49</color>
+    <color name="navigation_checked_video_text_color">#FFF16022</color>
+    <color name="navigation_checked_music_text_color">#FF14BF81</color>
+    <color name="navigation_checked_favor_text_color">#FFE1C247</color>
+
+    <color name="common_list_smart_tab_underline_color">#FFF24B17</color>
+
+    <color name="list_item_news_list_source_color">#FF999999</color>
+    <color name="list_item_news_list_date_color">#FFF58C47</color>
+
+    <color name="common_list_item_bg_pressed_color">#FFEEEEEE</color>
+    <color name="common_list_item_bg_normal_color">#FFFEFEFE</color>
+
+    <color name="music_player_sb_bg">#FFFFE4D9</color>
+    <color name="music_player_sb_progress_color">#FFE64626</color>
+    <color name="music_player_sb_secondary_progress_color">#FFE87F6A</color>
+    <color name="music_player_user_name_color">#FF1A7BE8</color>
+
+    <color name="player_container_bg">#FFDDDDDD</color>
+
+
+    <color name="base_bg">#ffeeeeee</color>
+    <color name="base_msg_color">#ff999999</color>
+    <color name="gplus_color_1">#3e802f</color>
+    <color name="gplus_color_2">#f4b400</color>
+    <color name="gplus_color_3">#427fed</color>
+    <color name="gplus_color_4">#b23424</color>
+
+    <color name="color_transparenthalf">#35000000</color>
+</resources>
