@@ -21,6 +21,7 @@ public class MyApp extends Application {
     public void onCreate() {
         super.onCreate();
         DownloadUtils.initDataBase(this);
+ //       DownloadUtils.changeFileDir(fileDir);//设置默认地址
     }
 }
 ```

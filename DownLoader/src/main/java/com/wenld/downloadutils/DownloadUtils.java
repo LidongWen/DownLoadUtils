@@ -5,10 +5,12 @@ import android.content.Context;
 import com.wenld.downloadutils.bean.FileInfo;
 import com.wenld.downloadutils.bean.FileInfoDao;
 import com.wenld.downloadutils.bean.ThreadInfoDao;
+import com.wenld.downloadutils.constant.DownloadConfig;
 import com.wenld.downloadutils.db.AbstractDatabaseManager;
 import com.wenld.downloadutils.db.FileInfoDB;
 import com.wenld.downloadutils.tool.DownLoadBinder;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -23,7 +25,11 @@ public class DownloadUtils {
     public static void initDataBase(Context mContext) {
         AbstractDatabaseManager.initOpenHelper(mContext);//初始化数据库
         AbstractDatabaseManager.getDaoSession().getDatabase().execSQL("update " + FileInfoDao.TABLENAME + " set " + FileInfoDao.Properties.IsDownload.columnName + "=0");
-
+    }
+    public static void changeFileDir(String fileDir){
+        if(new File(fileDir).exists()) {
+            DownloadConfig.setDestFileDir(fileDir);
+        }
     }
 
     /**

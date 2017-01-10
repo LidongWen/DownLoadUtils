@@ -45,6 +45,16 @@ public class DownloadConfig {
         return destFileDir;
     }
 
+
+    public static void setDestFileDir(String destFileDir) {
+        DownloadConfig.destFileDir = destFileDir;
+    }
+
+    public static String getDestFileDir() {
+        return DownloadConfig.destFileDir;
+    }
+
+
     /**
      * 每个文件的 下载线程数
      */
