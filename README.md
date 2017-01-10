@@ -73,7 +73,7 @@ DownloadUtils.getAllFileInfos();
 ```java
 DownloadUtils.getFileInfosByDownLoading();
 ```
-* 获取下载列表（已完成列表）
+## 获取下载列表（已完成列表）
 ```java
 DownloadUtils.getFileInfosByFinished();
 ```
