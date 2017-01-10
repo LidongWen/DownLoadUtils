@@ -26,10 +26,15 @@ public class DownloadUtils {
         AbstractDatabaseManager.initOpenHelper(mContext);//初始化数据库
         AbstractDatabaseManager.getDaoSession().getDatabase().execSQL("update " + FileInfoDao.TABLENAME + " set " + FileInfoDao.Properties.IsDownload.columnName + "=0");
     }
-    public static void changeFileDir(String fileDir){
-        if(new File(fileDir).exists()) {
+
+    public static void changeFileDir(String fileDir) {
+        if (new File(fileDir).exists()) {
             DownloadConfig.setDestFileDir(fileDir);
         }
+    }
+
+    public static String getFileDir() {
+        return DownloadConfig.getDestFileDir();
     }
 
     /**
