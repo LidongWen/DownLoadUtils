@@ -1,15 +1,13 @@
 package com.wenld.sample_filedownload;
 
 
-import com.wenld.downloadutils.bean.FileInfo;
-
 import java.io.Serializable;
 
 /**
  * Created by Administrator on 2016/11/30.
  */
 
-public class ThreeModel extends FileInfo implements Serializable {
+public class ThreeModel implements Serializable {
 
     /**
      * id : 文件id

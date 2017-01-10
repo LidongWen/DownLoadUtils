@@ -64,10 +64,6 @@ public class DownloadTask<T> {
      */
     public static ExecutorService sExecutorService = Executors.newFixedThreadPool(4);
 
-    //创建等待队列;
-//    public static BlockingQueue<Runnable> blockingQueue = new ArrayBlockingQueue<Runnable>(20);
-//    //创建一个单线程执行程序,它可以安排在指定的时间执行或者定期执行;
-//    public static ThreadPoolExecutor pool = new ThreadPoolExecutor(2, 5, 2, TimeUnit.MILLISECONDS, blockingQueue);
 
     public T postion;
 
@@ -107,6 +103,7 @@ public class DownloadTask<T> {
         }
 
         Intent intent = new Intent(IntentAction.ACTION_WAIT_DownLoad);
+        intent.putExtra(KeyName.FILEINFO_TAG, mFileInfo);
         intent.putExtra(KeyName.OTHER_MESSAGE, ((Serializable) postion));
         mContext.sendBroadcast(intent);
 
@@ -129,7 +126,6 @@ public class DownloadTask<T> {
                 threadInfo.setMd5(mFileInfo.getMd5());
                 threadInfo.setOver(false);
                 threadInfo.setOvertime("none");
-
 
                 if (i == mThreadNum - 1) {
                     threadInfo.setEnd(mFileInfo.getLength());// 设置最后一个线程的下载长度
@@ -198,7 +194,10 @@ public class DownloadTask<T> {
 
         @Override
         public void run() {
-//            super.run();
+            if (isPause) {
+                pause(0);
+                return;
+            }
             //设置url上资源下载位置/范围
             start = mThreadInfo.getStart() + mThreadInfo.getFinished();
             Log.e("DownloadTask", "bytes=" + start + "-" + mThreadInfo.getEnd());
@@ -209,13 +208,7 @@ public class DownloadTask<T> {
                 return;
             }
             try {
-//                URL url = new URL(mThreadInfo.getUrl());
                 conn = HttpUtils.getInstance().createConnection(mThreadInfo.getUrl());
-//                conn = (HttpsURLConnection) url.openConnection();
-//                conn.setRequestMethod("GET");
-//                conn.setConnectTimeout(10000);
-//                conn.setReadTimeout(10000);
-//                conn.setSSLSocketFactory();
                 conn.setRequestProperty("Range", "bytes=" + start + "-" + mThreadInfo.getEnd());
 
                 if (conn.getResponseCode() == 206) {
@@ -240,10 +233,9 @@ public class DownloadTask<T> {
                         mFinishedLen += len;
                         mThreadInfo.setFinished(mThreadInfo.getFinished() + len);
 
-
                         if (System.currentTimeMillis() - time > BROADCAST_TIME) {  //每500ms刷新一次
                             time = System.currentTimeMillis();
-                            progress_result = (double) mFinishedLen / (double) mFileInfo.getLength();  // 计算下载进度
+//                            progress_result = (double) mFinishedLen / (double) mFileInfo.getLength();  // 计算下载进度
                             download_rate = (double) len / (double) (1024 * BROADCAST_TIME / 1000);        // 计算下载速率
                             {
                                 /**
@@ -251,7 +243,7 @@ public class DownloadTask<T> {
                                  */
                                 Intent intent = new Intent(IntentAction.ACTION_UPDATE);
                                 intent.putExtra(KeyName.FINISHED_TAG, mFinishedLen);
-                                intent.putExtra(KeyName.FILEINFO_TAG,mFileInfo);
+                                intent.putExtra(KeyName.ID_Postion, mFileInfo.getId());
                                 intent.putExtra(KeyName.DOWNLOAD_RATE_TAG, download_rate);
                                 intent.putExtra(KeyName.OTHER_MESSAGE, ((Serializable) postion));
                                 mContext.sendBroadcast(intent);
@@ -259,22 +251,7 @@ public class DownloadTask<T> {
                         }
                         //下载暂停时，保存下载进度搭配数据库
                         if (isPause) {
-                            {
-                                //: 2016/12/29 保存线程下载进度到数据库
-                                new ThreadInfoDB().update(mThreadInfo);
-                                //  2017/1/1 更新文件的总进度至DB
-                                mFileInfo.setFinished(mFinishedLen);
-                                mFileInfo.setIsDownload(false);
-                                new FileInfoDB().update(mFileInfo);
-                                /**
-                                 *  通知UI更新进度条
-                                 */
-                                Intent intent = new Intent(IntentAction.ACTION_PAUSE);
-                                intent.putExtra(KeyName.FINISHED_TAG, mFinishedLen);
-                                intent.putExtra(KeyName.DOWNLOAD_RATE_TAG, download_rate);
-                                intent.putExtra(KeyName.OTHER_MESSAGE, ((Serializable) postion));
-                                mContext.sendBroadcast(intent);
-                            }
+                            pause(download_rate);
                             return;
                         }
 
@@ -292,6 +269,7 @@ public class DownloadTask<T> {
                     isFinished = true;// 标识线程执行完毕
                     checkAllThreadsFinished(mThreadInfo);
 
+                    //更新数据库
                     mThreadInfo.setOver(true);
                     mThreadInfo.setOvertime(getCurrentTime());
                     new ThreadInfoDB().update(mThreadInfo);
@@ -307,6 +285,10 @@ public class DownloadTask<T> {
 //                                mFileInfo.setFinished((int) (progress_result * 100));
                 mFileInfo.setIsDownload(false);
                 new FileInfoDB().update(mFileInfo);
+
+                Intent intent = new Intent(IntentAction.ACTION_FAILE);
+                intent.putExtra(KeyName.OTHER_MESSAGE, ((Serializable) postion));
+                mContext.sendBroadcast(intent);
 
             } finally {//关闭连接
                 try {
@@ -334,6 +316,28 @@ public class DownloadTask<T> {
                 return;
             }
         }
+
+        private void pause(double download_rate) {
+            try {
+                //: 2016/12/29 保存线程下载进度到数据库
+                new ThreadInfoDB().update(mThreadInfo);
+                //  2017/1/1 更新文件的总进度至DB
+                mFileInfo.setFinished(mFinishedLen);
+                mFileInfo.setIsDownload(false);
+//                mFileInfo.setRate(download_rate);
+                new FileInfoDB().update(mFileInfo);
+                /**
+                 *  通知UI更新进度条
+                 */
+                Intent intent = new Intent(IntentAction.ACTION_PAUSE);
+//                intent.putExtra(KeyName.FINISHED_TAG, mFinishedLen);
+                intent.putExtra(KeyName.FILEINFO_TAG, mFileInfo);
+                intent.putExtra(KeyName.OTHER_MESSAGE, ((Serializable) postion));
+                mContext.sendBroadcast(intent);
+            } catch (Exception e) {
+            }
+        }
+
     }
 
     /**

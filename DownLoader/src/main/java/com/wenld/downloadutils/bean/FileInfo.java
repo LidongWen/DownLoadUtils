@@ -17,11 +17,11 @@ public class FileInfo implements Serializable {
     private String fileName;
     /** Not-null value. */
     private String md5;
-    private int finished;
+    private Integer finished;
     private String rate;
     private Boolean over;
     private String overtime;
-    private Boolean isDownload;
+    private boolean isDownload;
 
     public FileInfo() {
     }
@@ -30,7 +30,7 @@ public class FileInfo implements Serializable {
         this.id = id;
     }
 
-    public FileInfo(String id, Integer length, String url, String fileName, String md5, int finished, String rate, Boolean over, String overtime, boolean isDownload) {
+    public FileInfo(String id, Integer length, String url, String fileName, String md5, Integer finished, String rate, Boolean over, String overtime, boolean isDownload) {
         this.id = id;
         this.length = length;
         this.url = url;
@@ -89,11 +89,11 @@ public class FileInfo implements Serializable {
         this.md5 = md5;
     }
 
-    public int getFinished() {
+    public Integer getFinished() {
         return finished;
     }
 
-    public void setFinished(int finished) {
+    public void setFinished(Integer finished) {
         this.finished = finished;
     }
 
@@ -121,7 +121,7 @@ public class FileInfo implements Serializable {
         this.overtime = overtime;
     }
 
-    public Boolean getIsDownload() {
+    public boolean getIsDownload() {
         return isDownload;
     }
 

@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.wenld.downloadutils.bean.FileInfoDao;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,13 +18,13 @@ import de.greenrobot.dao.internal.DaoConfig;
 /**
  * Created by wenld- on 2015/12/24.
  */
-public class DBMigrationHelper6 extends AbstractMigratorHelper {
+public class DBMigrationHelper13 extends AbstractMigratorHelper {
     private static final String CONVERSION_CLASS_NOT_FOUND_EXCEPTION = "MIGRATION HELPER - CLASS DOESN'T MATCH WITH THE CURRENT PARAMETERS";
-    private static DBMigrationHelper6 instance;
+    private static DBMigrationHelper13 instance;
 
-    public static DBMigrationHelper6 getInstance() {
+    public static DBMigrationHelper13 getInstance() {
         if (instance == null) {
-            instance = new DBMigrationHelper6();
+            instance = new DBMigrationHelper13();
         }
         return instance;
     }
@@ -30,6 +32,7 @@ public class DBMigrationHelper6 extends AbstractMigratorHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db) {
 //        migrate(db, NotesDao.class);
+        migrate(db, FileInfoDao.class);
     }
 
     public void migrate(SQLiteDatabase db, Class... daoClasses) {

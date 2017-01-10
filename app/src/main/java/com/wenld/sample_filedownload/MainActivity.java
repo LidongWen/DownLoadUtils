@@ -19,14 +19,10 @@ import com.wenld.downloadutils.bean.FileInfoDao;
 import com.wenld.downloadutils.constant.IntentAction;
 import com.wenld.downloadutils.constant.KeyName;
 import com.wenld.downloadutils.db.FileInfoDB;
-import com.wenld.sample_filedownload.adapterRecy.AdvancedAdapter;
-import com.wenld.sample_filedownload.adapterRecy.ItemClickInterface;
 import com.wenld.sample_filedownload.tool.FastJsonUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import de.greenrobot.dao.query.QueryBuilder;
 
 /**
  * Created by wenld on 2017/1/9.
@@ -37,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
      */
     RecyclerView rlvAty;
     SwipeRefreshLayout mSwipeLayout;
-    AdvancedAdapter adapter;
+    PdfThreeAdapter adapter;
     /**
      * data
      */
@@ -88,47 +84,6 @@ public class MainActivity extends AppCompatActivity {
         mSwipeLayout.setSize(SwipeRefreshLayout.LARGE);
     }
 
-
-    void PDFonItemClick(ThreeModel item, int position) {
-        try {
-            QueryBuilder qb = new FileInfoDB().getQueryBuilder();
-            List<FileInfo> allList = qb.where(FileInfoDao.Properties.Id.eq(item.getId())).list();
-            FileInfo mFileInfo;
-            if (allList != null && allList.size() > 0) {
-                mFileInfo = allList.get(0);
-                if (mFileInfo.getOver() != null && mFileInfo.getOver()) {
-                    Intent intents = new Intent(MainActivity.this, MainActivity.class);
-                    startActivity(intents);
-                } else if (mFileInfo.getIsDownload()) {
-                    /**
-                     * 暂停下载
-                     */
-                    DownloadUtils.stop(mFileInfo, null);
-                    return;
-                }
-            } else {
-                mFileInfo = new FileInfo();
-                mFileInfo.setUrl(item.getFile_url());
-                mFileInfo.setId(item.getId());
-                mFileInfo.setFileName(item.getFile_name());
-                mFileInfo.setMd5(item.getFile_url());
-            }
-            /**
-             * 自定义消息
-             */
-            OtherMessage otherMessage = new OtherMessage();
-            otherMessage.setPostion(position);
-            otherMessage.setId("1");
-            /**
-             * 开始下载/继续下载
-             */
-            DownloadUtils.startDownload(this, mFileInfo, otherMessage);
-
-        } catch (Exception e) {
-        }
-
-    }
-
     private void initData() {
         mDatas.clear();
         mDatas.addAll(FastJsonUtil.getListObjects("[{\"users\":\"店长/陈列小帮手\",\"dept_name\":\"零售管理中心\",\"file_url\":\"https://app.qipai.com:443/appCenter/file/files/终端橱窗推广与安装标准说明.pdf\",\"id\":\"61\",\"file_author\":\"零售管理中心\",\"file_desc\":\"\",\"file_img\":\"\",\"file_name\":\"终端橱窗推广与安装标准说明\",\"order_no\":\"1\",\"category_id\":\"7\",\"flag\":\"0\",\"create_time\":\"2016-12-22 09:00:28\"},{\"users\":\"店长/陈列小帮手\",\"dept_name\":\"零售管理中心\",\"file_url\":\"https://app.qipai.com:443/appCenter/file/files/POP海报制作流程与安装说明2016.pdf\",\"id\":\"60\",\"file_author\":\"零售管理中心\",\"file_desc\":\"\",\"file_img\":\"\",\"file_name\":\"POP海报制作流程与安装说明2016\",\"order_no\":\"1\",\"category_id\":\"7\",\"flag\":\"0\",\"create_time\":\"2016-12-22 09:00:27\"},{\"users\":\"店长/陈列小帮手\",\"dept_name\":\"零售管理中心\",\"file_url\":\"https://app.qipai.com:443/appCenter/file/files/集成店陈列标准.pdf\",\"id\":\"59\",\"file_author\":\"零售管理中心\",\"file_desc\":\"集成店陈列标准介绍\",\"file_img\":\"\",\"file_name\":\"集成店陈列标准\",\"order_no\":\"1\",\"category_id\":\"7\",\"flag\":\"0\",\"create_time\":\"2016-12-22 09:00:26\"},{\"users\":\"店长/陈列小帮手\",\"dept_name\":\"零售管理中心\",\"file_url\":\"https://app.qipai.com:443/appCenter/file/files/黑标9s代店陈列标准.pdf\",\"id\":\"58\",\"file_author\":\"零售管理中心\",\"file_desc\":\"九代店铺陈列标准介绍\",\"file_img\":\"\",\"file_name\":\"黑标9s代店陈列标准\",\"order_no\":\"1\",\"category_id\":\"7\",\"flag\":\"0\",\"create_time\":\"2016-12-22 09:00:25\"},{\"users\":\"店长/陈列小帮手\",\"dept_name\":\"零售管理中心\",\"file_url\":\"https://app.qipai.com:443/appCenter/file/files/八代陈列标准.pdf\",\"id\":\"57\",\"file_author\":\"零售管理中心\",\"file_desc\":\"八代店铺陈列标准介绍\",\"file_img\":\"\",\"file_name\":\"八代陈列标准\",\"order_no\":\"1\",\"category_id\":\"7\",\"flag\":\"0\",\"create_time\":\"2016-12-22 09:00:24\"}]", ThreeModel.class));
@@ -142,10 +97,53 @@ public class MainActivity extends AppCompatActivity {
                 mSwipeLayout.setRefreshing(false);
             }
         });
-        adapter.setListener(new ItemClickInterface<ThreeModel>() {
+        adapter.setLoderListener(new PdfThreeAdapter.IDownLoderListener() {
             @Override
-            public void onItemClick(ThreeModel Item, int position) {
-                PDFonItemClick(Item, position);
+            public void start(FileInfo item, int position) {
+                /**
+                 * 自定义消息
+                 */
+                OtherMessage otherMessage = new OtherMessage();
+                otherMessage.setPostion(position);
+                otherMessage.setId("1");
+                /**
+                 * 开始下载/继续下载
+                 */
+                DownloadUtils.startDownload(MainActivity.this, item, otherMessage);
+            }
+
+            @Override
+            public void stop(FileInfo item, int position) {
+                /**
+                 * 暂停下载
+                 */
+                DownloadUtils.stop(item, null);
+            }
+
+            @Override
+            public void reload(FileInfo item, int position) {
+                /**
+                 * 自定义消息
+                 */
+                OtherMessage otherMessage = new OtherMessage();
+                otherMessage.setPostion(position);
+                otherMessage.setId("1");
+                /**
+                 *
+                 */
+                DownloadUtils.ReDownLoad(MainActivity.this, item, otherMessage);
+            }
+
+            @Override
+            public void delete(FileInfo item, int position) {
+                /**
+                 * 自定义消息
+                 */
+                OtherMessage otherMessage = new OtherMessage();
+                otherMessage.setPostion(position);
+                otherMessage.setId("1");
+
+                DownloadUtils.delete(item, otherMessage);
             }
         });
     }
@@ -165,66 +163,36 @@ public class MainActivity extends AppCompatActivity {
                 return;
 
             if (IntentAction.ACTION_WAIT_DownLoad.equals(intent.getAction())) {
-                ThreeModel threeModel = mDatas.get(otherMessage.getPostion());
-                threeModel.setIsDownload(true);
-                updateUIbyPostion(threeModel, otherMessage.getPostion());
+                FileInfo mFileInfo = (FileInfo) intent.getSerializableExtra(KeyName.FILEINFO_TAG);
+                if (mFileInfo != null) {
+                    adapter.getFileInfoMap().put(mFileInfo.getId(), mFileInfo);
+                    updateUIbyPostion(mFileInfo, otherMessage.getPostion());
+                }
             }
             //进行下载：更新下载进度和速度
             else if (IntentAction.ACTION_UPDATE.equals(intent.getAction())) {
                 int finished = intent.getIntExtra(KeyName.FINISHED_TAG, 0);
-                double rate = intent.getDoubleExtra(KeyName.DOWNLOAD_RATE_TAG, 0);
-                ThreeModel threeModel = mDatas.get(otherMessage.getPostion());
-                FileInfo mFileInfo = (FileInfo) intent.getSerializableExtra(KeyName.FILEINFO_TAG);
+                String id = intent.getStringExtra(KeyName.ID_Postion);
+                FileInfo mFileInfo = adapter.getFileInfoMap().get(id);
                 if (mFileInfo != null) {
-                    mergeThreeModel(threeModel, mFileInfo);
-                    if (mFileInfo.getOver() != null && mFileInfo.getOver()) {
-//                        Intent intents = new Intent(mContext, PDFShowActivity.class);
-//                        intents.putExtra(SType.Intent_FilePath, "file://" + destFileDir + "/" + mFileInfo.getFileName());
-//                        mContext.startActivity(intents);
-                    }
+                    mFileInfo.setFinished(finished);
+//                    adapter.getFileInfoMap().put(mFileInfo.getId(), mFileInfo);
+                    updateUIbyPostion(mFileInfo, otherMessage.getPostion());
                 }
-                threeModel.setFinished(finished);
-                threeModel.setIsDownload(true);
-                updateUIbyPostion(threeModel, otherMessage.getPostion());
-
             } else if (IntentAction.ACTION_FINISH.equals(intent.getAction())) { //下载结束
 
-                ThreeModel threeModel = mDatas.get(otherMessage.getPostion());
-                threeModel.setOver(true);
-                QueryBuilder qb = new FileInfoDB().getQueryBuilder();
-                List<FileInfo> allList = qb.where(FileInfoDao.Properties.Id.eq(threeModel.getId())).list();
-                FileInfo mFileInfo;
-                if (allList != null && allList.size() > 0) {
-                    mFileInfo = allList.get(0);
-                    mergeThreeModel(threeModel, mFileInfo);
+                FileInfo mFileInfo = (FileInfo) intent.getSerializableExtra(KeyName.FILEINFO_TAG);
+                if (mFileInfo != null) {
+                    adapter.getFileInfoMap().put(mFileInfo.getId(), mFileInfo);
+                    updateUIbyPostion(mFileInfo, otherMessage.getPostion());
                 }
-                if (threeModel.getOver()) {
-//                        Intent intents = new Intent(MainActivity.this, MainActivity.class);
-//                        startActivity(intents);
-                }
-                updateUIbyPostion(threeModel, otherMessage.getPostion());
             } else if (IntentAction.ACTION_PAUSE.equals(intent.getAction())) {  //下载暂停
-                ThreeModel threeModel = mDatas.get(otherMessage.getPostion());
-
-                QueryBuilder qb = new FileInfoDB().getQueryBuilder();
-                List<FileInfo> allList = qb.where(FileInfoDao.Properties.Id.eq(threeModel.getId())).list();
-                FileInfo mFileInfo;
-                if (allList != null && allList.size() > 0) {
-                    mFileInfo = allList.get(0);
-                    mergeThreeModel(threeModel, mFileInfo);
+                FileInfo mFileInfo = (FileInfo) intent.getSerializableExtra(KeyName.FILEINFO_TAG);
+                if (mFileInfo != null) {
+                    adapter.getFileInfoMap().put(mFileInfo.getId(), mFileInfo);
+                    updateUIbyPostion(mFileInfo, otherMessage.getPostion());
                 }
-                updateUIbyPostion(threeModel, otherMessage.getPostion());
             } else if (IntentAction.ACTION_FAILE.equals(intent.getAction())) {  //下载失败
-                ThreeModel threeModel = mDatas.get(otherMessage.getPostion());
-
-                QueryBuilder qb = new FileInfoDB().getQueryBuilder();
-                List<FileInfo> allList = qb.where(FileInfoDao.Properties.Id.eq(threeModel.getId())).list();
-                FileInfo mFileInfo;
-                if (allList != null && allList.size() > 0) {
-                    mFileInfo = allList.get(0);
-                    mergeThreeModel(threeModel, mFileInfo);
-                }
-                updateUIbyPostion(threeModel, otherMessage.getPostion());
             }
         }
     };
@@ -237,33 +205,18 @@ public class MainActivity extends AppCompatActivity {
             allList = new FileInfoDB().getQueryBuilder().where(FileInfoDao.Properties.Id.eq(threeModel.getId())).list();
             if (allList != null && allList.size() > 0) {
                 mFileInfo = allList.get(0);
+                adapter.getFileInfoMap().put(mFileInfo.getId(), mFileInfo);
+            } else {
+                mFileInfo = new FileInfo();
 
-                threeModel.setLength(mFileInfo.getLength());
-                threeModel.setUrl(mFileInfo.getUrl());
-                threeModel.setFileName(mFileInfo.getFileName());
-                threeModel.setMd5(mFileInfo.getMd5());
-                threeModel.setFinished(mFileInfo.getFinished());
-                threeModel.setRate(mFileInfo.getRate());
-                threeModel.setOver(mFileInfo.getOver());
-                threeModel.setOvertime(mFileInfo.getOvertime());
-                threeModel.setIsDownload(mFileInfo.getIsDownload());
+                mFileInfo.setUrl(threeModel.getFile_url());
+                mFileInfo.setId(threeModel.getId());
+                mFileInfo.setFileName(threeModel.getFile_name());
+                mFileInfo.setMd5(threeModel.getFile_url());
+                adapter.getFileInfoMap().put(mFileInfo.getId(), mFileInfo);
             }
         }
         bindList(mDatas);
-    }
-
-    private void mergeThreeModel(ThreeModel threeModel, FileInfo mFileInfo) {
-
-        threeModel.setLength(mFileInfo.getLength());
-        threeModel.setUrl(mFileInfo.getUrl());
-        threeModel.setFileName(mFileInfo.getFileName());
-        threeModel.setMd5(mFileInfo.getMd5());
-        threeModel.setFinished(mFileInfo.getFinished());
-        threeModel.setRate(mFileInfo.getRate());
-        threeModel.setOver(mFileInfo.getOver());
-        threeModel.setOvertime(mFileInfo.getOvertime());
-        threeModel.setIsDownload(mFileInfo.getIsDownload());
-
     }
 
 
@@ -274,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
             mSwipeLayout.setRefreshing(false);
     }
 
-    public void updateUIbyPostion(ThreeModel mData, int postion) {
+    public void updateUIbyPostion(FileInfo fileInfo, int postion) {
 //        adapter.notifyItemChanged(postion);
         LinearLayoutManager linearManager = (LinearLayoutManager) rlvAty.getLayoutManager();
         //获取最后一个可见view的位置
@@ -288,19 +241,21 @@ public class MainActivity extends AppCompatActivity {
                 PdfThreeAdapter.Holder viewHolder = (PdfThreeAdapter.Holder) rlvAty.getChildViewHolder(v);
                 if (viewHolder == null)
                     return;
-                viewHolder.flikerbar_item_pdfthree.setVisibility(View.VISIBLE);
 
-                if (mData.getOver() != null && mData.getOver()) {
+                if (fileInfo == null)
+                    return;
+
+                if (fileInfo.getFinished() != null && fileInfo.getFinished() > 0 && fileInfo.getLength() != null && fileInfo.getLength() > 0) {
+                    viewHolder.flikerbar_item_pdfthree.setProgress((int) (((double) fileInfo.getFinished() / (double) fileInfo.getLength()) * 100));
+                }
+                // 完成
+                if (fileInfo.getOver() != null && fileInfo.getOver()) {
                     viewHolder.flikerbar_item_pdfthree.finishLoad();
                 } else {
-                    if (mData.getIsDownload() != null && mData.getIsDownload()) {
-                        try {
-                            viewHolder.flikerbar_item_pdfthree.setProgress((int) (((double) mData.getFinished() / (double) mData.getLength()) * 100));
-                        } catch (Exception e) {
-                        }
+                    if (fileInfo.getIsDownload()) {
                         viewHolder.flikerbar_item_pdfthree.processingLoad();
                     } else {
-                        if (mData.getFinished() > 0) {
+                        if (fileInfo.getFinished() != null && fileInfo.getFinished() > 0) {
                             viewHolder.flikerbar_item_pdfthree.pauseLoad();
                         } else {
                             viewHolder.flikerbar_item_pdfthree.unBeginLoad();

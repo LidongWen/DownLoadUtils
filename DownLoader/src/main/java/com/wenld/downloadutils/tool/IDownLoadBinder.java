@@ -13,4 +13,10 @@ public interface IDownLoadBinder {
     <T> void stop(FileInfo mFileInfo, T postion);
 
     void allStop();
+
+    <T> void ReDownLoad(Context mContext, FileInfo mFileInfo, T postion);
+
+    void deleteAll();
+
+    <T> void delete(FileInfo mFileInfo, T postion);
 }

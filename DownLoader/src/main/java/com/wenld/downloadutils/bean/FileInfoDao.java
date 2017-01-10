@@ -27,7 +27,7 @@ public class FileInfoDao extends AbstractDao<FileInfo, String> {
         public final static Property Url = new Property(2, String.class, "url", false, "URL");
         public final static Property FileName = new Property(3, String.class, "fileName", false, "FILE_NAME");
         public final static Property Md5 = new Property(4, String.class, "md5", false, "MD5");
-        public final static Property Finished = new Property(5, int.class, "finished", false, "FINISHED");
+        public final static Property Finished = new Property(5, Integer.class, "finished", false, "FINISHED");
         public final static Property Rate = new Property(6, String.class, "rate", false, "RATE");
         public final static Property Over = new Property(7, Boolean.class, "over", false, "OVER");
         public final static Property Overtime = new Property(8, String.class, "overtime", false, "OVERTIME");
@@ -52,7 +52,7 @@ public class FileInfoDao extends AbstractDao<FileInfo, String> {
                 "\"URL\" TEXT NOT NULL ," + // 2: url
                 "\"FILE_NAME\" TEXT NOT NULL ," + // 3: fileName
                 "\"MD5\" TEXT NOT NULL ," + // 4: md5
-                "\"FINISHED\" INTEGER NOT NULL ," + // 5: finished
+                "\"FINISHED\" INTEGER," + // 5: finished
                 "\"RATE\" TEXT," + // 6: rate
                 "\"OVER\" INTEGER," + // 7: over
                 "\"OVERTIME\" TEXT," + // 8: overtime
@@ -82,7 +82,11 @@ public class FileInfoDao extends AbstractDao<FileInfo, String> {
         stmt.bindString(3, entity.getUrl());
         stmt.bindString(4, entity.getFileName());
         stmt.bindString(5, entity.getMd5());
-        stmt.bindLong(6, entity.getFinished());
+ 
+        Integer finished = entity.getFinished();
+        if (finished != null) {
+            stmt.bindLong(6, finished);
+        }
  
         String rate = entity.getRate();
         if (rate != null) {
@@ -116,7 +120,7 @@ public class FileInfoDao extends AbstractDao<FileInfo, String> {
             cursor.getString(offset + 2), // url
             cursor.getString(offset + 3), // fileName
             cursor.getString(offset + 4), // md5
-            cursor.getInt(offset + 5), // finished
+            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // finished
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // rate
             cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0, // over
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // overtime
@@ -133,7 +137,7 @@ public class FileInfoDao extends AbstractDao<FileInfo, String> {
         entity.setUrl(cursor.getString(offset + 2));
         entity.setFileName(cursor.getString(offset + 3));
         entity.setMd5(cursor.getString(offset + 4));
-        entity.setFinished(cursor.getInt(offset + 5));
+        entity.setFinished(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
         entity.setRate(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setOver(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
         entity.setOvertime(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
@@ -157,7 +161,7 @@ public class FileInfoDao extends AbstractDao<FileInfo, String> {
     }
 
     /** @inheritdoc */
-    @Override
+    @Override    
     protected boolean isEntityUpdateable() {
         return true;
     }

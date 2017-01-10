@@ -5,12 +5,16 @@ import android.os.Binder;
 
 import com.wenld.downloadutils.bean.FileInfo;
 import com.wenld.downloadutils.bean.FileInfoDao;
+import com.wenld.downloadutils.bean.ThreadInfo;
+import com.wenld.downloadutils.bean.ThreadInfoDao;
 import com.wenld.downloadutils.constant.DownloadConfig;
 import com.wenld.downloadutils.db.FileInfoDB;
+import com.wenld.downloadutils.db.ThreadInfoDB;
 
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +34,9 @@ public class DownLoadBinder extends Binder implements IDownLoadBinder {
     }
 
     public <T> void startDownload(Context mContext, FileInfo mFileInfo, T postion) {
+        if (mContext == null || mFileInfo == null) {
+            throw new NullPointerException("");
+        }
         List<FileInfo> list = new FileInfoDB().getQueryBuilder().where(FileInfoDao.Properties.Id.eq(mFileInfo.getId())).list();
         if (list != null && list.size() > 0) {
             mFileInfo = list.get(0);
@@ -47,6 +54,76 @@ public class DownLoadBinder extends Binder implements IDownLoadBinder {
         } else {
             netWork(mContext, mFileInfo, postion);
         }
+    }
+
+    public <T> void stop(FileInfo mFileInfo, T postion) {
+        if (mFileInfo == null) {
+            throw new NullPointerException("");
+        }
+        DownloadTask tast = mTask.get(mFileInfo.getId()); // 从集合中取出下载任务
+        if (tast != null) {
+            tast.isPause = true;
+            mTask.remove(tast);
+        }
+    }
+
+    public void allStop() {
+
+        Iterator<Map.Entry<String, DownloadTask>> entries = mTask.entrySet().iterator();
+
+        while (entries.hasNext()) {
+            Map.Entry<String, DownloadTask> entry = entries.next();
+            DownloadTask tast = entry.getValue();
+            tast.isPause = true;
+            mTask.remove(tast);
+        }
+    }
+
+    @Override
+    public <T> void ReDownLoad(Context mContext, FileInfo mFileInfo, T postion) {
+        if (mContext == null || mFileInfo == null) {
+            throw new NullPointerException("");
+        }
+
+        DownloadTask tast = mTask.get(mFileInfo.getId()); // 从集合中取出下载任务
+        if (tast != null) {
+            tast.isPause = true;
+            mTask.remove(tast);
+        }
+
+        List<FileInfo> list = new FileInfoDB().getQueryBuilder().where(FileInfoDao.Properties.Id.eq(mFileInfo.getId())).list();
+        if (list != null && list.size() > 0) {
+            mFileInfo = list.get(0);
+            new FileInfoDB().delete(mFileInfo);
+        }
+
+        List<ThreadInfo> threadInfoList = null;
+        {
+            // 2016/12/29  先从数据库中获取线程
+            threadInfoList = new ThreadInfoDB().getQueryBuilder().where(ThreadInfoDao.Properties.FileId.eq(mFileInfo.getId())).list();
+            if (threadInfoList != null) {
+                new ThreadInfoDB().deleteList(threadInfoList);
+            }
+        }
+        startDownload(mContext, mFileInfo, postion);
+    }
+
+    @Override
+    public void deleteAll() {
+        allStop();
+        new FileInfoDB().deleteAll();
+        new ThreadInfoDB().deleteAll();
+    }
+
+    @Override
+    public <T> void delete(FileInfo mFileInfo, T postion) {
+        if (mFileInfo == null) {
+            throw new NullPointerException("");
+        }
+
+        stop(mFileInfo, postion);
+        new FileInfoDB().delete(mFileInfo);
+        new ThreadInfoDB().deleteList(new ThreadInfoDB().getQueryBuilder().where(ThreadInfoDao.Properties.FileId.eq(mFileInfo.getId())).list());
     }
 
     private <T> void netWork(final Context mContext, final FileInfo mFileInfo, final T postion) {
@@ -72,19 +149,6 @@ public class DownLoadBinder extends Binder implements IDownLoadBinder {
                 }
             }
         }).start();
-
-    }
-
-    public <T> void stop(FileInfo mFileInfo, T postion) {
-        DownloadTask tast = mTask.get(mFileInfo.getId()); // 从集合中取出下载任务
-        if (tast != null) {
-            tast.isPause = true;
-            mTask.remove(tast);
-        }
-    }
-
-    public void allStop() {
-
     }
 
 

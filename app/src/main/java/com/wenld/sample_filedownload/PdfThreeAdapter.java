@@ -7,19 +7,33 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.wenld.downloadutils.bean.FileInfo;
 import com.wenld.sample_filedownload.adapterRecy.AdvancedAdapter;
 import com.wenld.sample_filedownload.tool.StringUtils;
 import com.wenld.sample_filedownload.widgets.FlikerProgressBar;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2016/6/30.
  */
 public class PdfThreeAdapter extends AdvancedAdapter<PdfThreeAdapter.Holder, ThreeModel> {
     Context mContext;
+    public Map<String, FileInfo> fileInfoMap=new HashMap<>();
+
+    public Map<String, FileInfo> getFileInfoMap() {
+        return fileInfoMap;
+    }
+
+    public void setFileInfoMap(Map<String, FileInfo> fileInfoMap) {
+        this.fileInfoMap = fileInfoMap;
+    }
 
     public PdfThreeAdapter(Context mContext) {
         this.mContext = mContext;
@@ -27,21 +41,6 @@ public class PdfThreeAdapter extends AdvancedAdapter<PdfThreeAdapter.Holder, Thr
 
     @Override
     public int getAdvanceViewType(int position) {
-/**
- * 这边设置不同的itemType 在网格布局中会出现独占一行的问题
- */
-//        if (mData != null && mData.size() > 0) {
-//            switch (StringUtils.processNullStr(mData.get(position).getType())) {
-//                case SType.type_APK:
-//                    return 0x1001;
-//                case SType.type_PDF:
-//                    return 0x1002;
-//                case SType.type_Video:
-//                    return 0x1003;
-//                case SType.type_WEB:
-//                    return 0x1004;
-//            }
-//        }
         return 0;
     }
 
@@ -55,19 +54,25 @@ public class PdfThreeAdapter extends AdvancedAdapter<PdfThreeAdapter.Holder, Thr
                     .dontAnimate()
                     .into(viewHolder.iv_item_pdfthree);
             viewHolder.tv_item_pdfthree.setText(StringUtils.processNullStr(item.getFile_name()));
-            viewHolder.tv_memo_item_pdfthree.setText(StringUtils.processNullStr(item.getFile_desc()));
+            viewHolder.tv_memo_item_pdfthree.setText("自定义字段：" + StringUtils.processNullStr(item.getFile_desc()));
             viewHolder.tv_item_pdfthree.setTag(item.getId());
         }
 
-        // 完成 就隐藏
-        if (item.getOver() != null && item.getOver()) {
+        FileInfo fileInfo = fileInfoMap.get(item.getId());
+        if (fileInfo == null)
+            return;
+
+        if (fileInfo.getFinished() != null && fileInfo.getFinished() > 0 && fileInfo.getLength() != null && fileInfo.getLength() > 0) {
+            viewHolder.flikerbar_item_pdfthree.setProgress((int) (((double) fileInfo.getFinished() / (double) fileInfo.getLength()) * 100));
+        }
+        // 完成
+        if (fileInfo.getOver() != null && fileInfo.getOver()) {
             viewHolder.flikerbar_item_pdfthree.finishLoad();
         } else {
-            if (item.getIsDownload() != null && item.getIsDownload()) {
-                viewHolder.flikerbar_item_pdfthree.setProgress((int) (((double) item.getFinished() / (double) item.getLength()) * 100));
+            if (fileInfo.getIsDownload()) {
                 viewHolder.flikerbar_item_pdfthree.processingLoad();
             } else {
-                if (item.getFinished() > 0) {
+                if (fileInfo.getFinished() != null && fileInfo.getFinished() > 0) {
                     viewHolder.flikerbar_item_pdfthree.pauseLoad();
                 } else {
                     viewHolder.flikerbar_item_pdfthree.unBeginLoad();
@@ -75,20 +80,6 @@ public class PdfThreeAdapter extends AdvancedAdapter<PdfThreeAdapter.Holder, Thr
             }
         }
     }
-//        viewHolder.tvUserName.setText(item.getNickname());
-//        viewHolder.tvTime.setText(StringUtils.processNullStr(item.getCreate_time()));
-//        if ("".equals(StringUtils.processNullStr(item.getReply_user_id()))) {
-//            viewHolder.tvContent.setText(StringUtils.processNullStr(item.getContent()));
-//        } else {
-//            SpannableStringBuilder builder = new SpannableStringBuilder();
-//            builder.append(StringUtils.processNullStr(item.getContent()) + " ");
-//            builder.append(setClickableSpan("||@" + StringUtils.processNullStr(item.getReply_nickname()) + " :", StringUtils.processNullStr(item.getReply_user_id())));
-//            builder.append(setColorSpan(StringUtils.processNullStr(item.getReply_content()), mContext.getResources().getColor(R.color.darkgray)));
-//            viewHolder.tvContent.setText(builder);
-//        }
-//        laudChanged(viewHolder.ivZan, item.getDiscuss_like());
-//        viewHolder.tvZanCount.setText(StringUtils.processNullStr(item.getLike_num()));
-//        showItemAnim(viewHolder.tvContent, position);
 
 
     private SpannableString setColorSpan(String textStr, int Color) {
@@ -98,10 +89,10 @@ public class PdfThreeAdapter extends AdvancedAdapter<PdfThreeAdapter.Holder, Thr
     }
 
     @Override
-    public PdfThreeAdapter.Holder onCreateAdvanceViewHolder(ViewGroup parent, int viewType) {
-        PdfThreeAdapter.Holder viewHolder;
+    public Holder onCreateAdvanceViewHolder(ViewGroup parent, int viewType) {
+        Holder viewHolder;
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pdfthree, parent, false);
-        viewHolder = new PdfThreeAdapter.Holder(view);
+        viewHolder = new Holder(view);
         return viewHolder;
     }
 
@@ -112,50 +103,80 @@ public class PdfThreeAdapter extends AdvancedAdapter<PdfThreeAdapter.Holder, Thr
         public TextView tv_item_pdfthree;
         public TextView tv_memo_item_pdfthree;
         public FlikerProgressBar flikerbar_item_pdfthree;
+        public Button btnStart;
+        public Button btnStop;
+        public Button btnReload;
+        public Button btnDelete;
 
         public Holder(View rootView) {
             super(rootView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (listener != null) {
-                        listener.onItemClick(mData.get(getAdpPosition()), getAdpPosition());
-                    }
-                }
-            });
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (listener != null) {
+//                        listener.onItemClick(mData.get(getAdpPosition()), getAdpPosition());
+//                    }
+//                }
+//            });
             this.iv_item_pdfthree = (ImageView) rootView.findViewById(R.id.iv_item_pdfthree);
             this.tv_item_pdfthree = (TextView) rootView.findViewById(R.id.tv_item_pdfthree);
             this.tv_memo_item_pdfthree = (TextView) rootView.findViewById(R.id.tv_memo_item_pdfthree);
             this.flikerbar_item_pdfthree = (FlikerProgressBar) rootView.findViewById(R.id.flikerbar_item_pdfthree);
-        }
 
+            this.btnStart = (Button) rootView.findViewById(R.id.btn_start);
+            this.btnStop = (Button) rootView.findViewById(R.id.btn_stop);
+            this.btnReload = (Button) rootView.findViewById(R.id.btn_reload);
+            this.btnDelete = (Button) rootView.findViewById(R.id.btn_delete);
+            btnDelete.setVisibility(View.GONE);
+
+            btnStart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (loderListener != null) {
+                        loderListener.start(fileInfoMap.get(mData.get(getAdpPosition()).getId()), getAdpPosition());
+                    }
+                }
+            });
+            btnStop.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (loderListener != null) {
+                        loderListener.stop(fileInfoMap.get(mData.get(getAdpPosition()).getId()), getAdpPosition());
+                    }
+                }
+            });
+            btnReload.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (loderListener != null) {
+                        loderListener.reload(fileInfoMap.get(mData.get(getAdpPosition()).getId()), getAdpPosition());
+                    }
+                }
+            });
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (loderListener != null) {
+                        loderListener.delete(fileInfoMap.get(mData.get(getAdpPosition()).getId()), getAdpPosition());
+                    }
+                }
+            });
+        }
     }
 
-//    /**
-//     * 更新listView可视区域中item的进度条和下载进度、速度
-//     * @param id         需要更新的文件在list中的id
-//     * @param progres    需要更新的下载文件的下载进度
-//     * @param rate		  需要更新的下载文件的下载速度
-//     */
-//    public void updateListView(int id, double progres, double rate ){
-//
-//        // 判断下载中的文件是否在可视区，是则更新进度和下载速度
-//        ThreeModel fileInfo = mData.get(id);
-//        int start = getFirstVisiblePosition();  // 可见视图的首个item的位置
-//        int end   = mListView.getLastVisiblePosition();   // 可见视图的最后item的位置
-//        int  position = mFileList.indexOf(fileInfo);      // 获取需要更新进度的下载文件fileInfo的位置
-//        //----------
-//        if( position -start >= 0 && end -position >= 0 ){
-//            View view = mListView.getChildAt(position -start);
-//            if(view == null) {
-//                return;
-//            }
-//            //------------
-//            fileInfo.setRate( rate);
-//            fileInfo.setFinished( progres);
-//            ViewHolder holder = (ViewHolder) view.getTag();
-//            setData( holder, position);
-//        }
-//    }
+    IDownLoderListener loderListener;
 
+    public void setLoderListener(IDownLoderListener loderListener) {
+        this.loderListener = loderListener;
+    }
+
+    public interface IDownLoderListener {
+        void start(FileInfo item, int position);
+
+        void stop(FileInfo item, int position);
+
+        void reload(FileInfo item, int position);
+
+        void delete(FileInfo item, int position);
+    }
 }

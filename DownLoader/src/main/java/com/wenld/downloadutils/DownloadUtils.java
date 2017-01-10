@@ -36,11 +36,31 @@ public class DownloadUtils {
         DownLoadBinder.getInstance().startDownload(mContext, mFileInfo, postion);
     }
 
-    public static  <T> void stop(FileInfo mFileInfo, T postion) {
+    public static <T> void stop(FileInfo mFileInfo, T postion) {
         DownLoadBinder.getInstance().stop(mFileInfo, postion);
     }
 
-    public static  void allStop() {
-        DownLoadBinder.getInstance().allStop();
+    public static void allStop() {
+//        DownLoadBinder.getInstance().allStop();
+    }
+
+    /**
+     * 重新下载
+     *
+     * @param mFileInfo
+     * @param postion
+     * @param <T>
+     */
+    public static <T> void ReDownLoad(Context mContext, FileInfo mFileInfo, T postion) {
+        DownLoadBinder.getInstance().ReDownLoad(mContext, mFileInfo, postion);
+    }
+
+    // TODO: 2017/1/10 删除完以后 通知这块 判断逻辑还需要优化
+    public static <T> void delete(FileInfo mFileInfo, T postion) {
+        DownLoadBinder.getInstance().delete(mFileInfo, postion);
+    }
+
+    public static void deleteAll() {
+        DownLoadBinder.getInstance().deleteAll();
     }
 }
