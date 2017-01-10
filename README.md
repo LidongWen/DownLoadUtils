@@ -2,7 +2,7 @@
  实现文件 多线程断点下载
  ## 用法
 ```groovy
-compile 'com.github.LidongWen:DownLoadUtils:1.1.0'
+compile 'com.github.LidongWen:DownLoadUtils:1.0.1'
 ```
 ## 目前对以下需求进行了封装
 * 下载文件
