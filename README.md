@@ -56,7 +56,7 @@ DownloadUtils.ReDownLoad(MainActivity.this, item, otherMessage);
 
 ## 文件 DB 操作
 ```java
-new FileInfoDB().selectByPrimaryKey();
-List list= new FileInfoDB().getQueryBuilder().where(FileInfoDao.Properties.Id.eq(threeModel.getId())).list();
+DownloadUtils.getFileDB().selectByPrimaryKey();
+List list= DownloadUtils.getFileDB().getQueryBuilder().where(FileInfoDao.Properties.Id.eq(threeModel.getId())).list();
 //等等一系列的数据库操作
 ```
