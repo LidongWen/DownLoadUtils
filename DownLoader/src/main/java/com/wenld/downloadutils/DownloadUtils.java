@@ -28,8 +28,12 @@ public class DownloadUtils {
     }
 
     public static void changeFileDir(String fileDir) {
+        if (fileDir == null)
+            throw new NullPointerException("无效的地址");
         if (new File(fileDir).exists()) {
             DownloadConfig.setDestFileDir(fileDir);
+        } else {
+            throw new NullPointerException("无效的地址");
         }
     }
 

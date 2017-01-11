@@ -2,7 +2,9 @@
  实现文件 多线程断点下载
  ## 用法
 ```groovy
-compile 'com.github.LidongWen:DownLoadUtils:1.0.3'
+dependencies {
+    compile 'com.github.LidongWen:DownLoadUtils:1.1.0'
+}
 ```
 ## 目前对以下需求进行了封装
 * 下载文件
@@ -13,6 +15,7 @@ compile 'com.github.LidongWen:DownLoadUtils:1.0.3'
 * 获取下载列表（All）
 * 获取下载列表（暂停||下载中 未完成列表）
 * 获取下载列表（已完成列表）
+* 实时下载进度\更新下载状态
 
 ##初始化
 ```java
@@ -73,7 +76,40 @@ DownloadUtils.getAllFileInfos();
 ```java
 DownloadUtils.getFileInfosByDownLoading();
 ```
-* 获取下载列表（已完成列表）
+## 获取下载列表（已完成列表）
 ```java
 DownloadUtils.getFileInfosByFinished();
+```
+## 实时下载进度\更新下载状态
+实时 获取下载文件的进度,这边通过广播来接收下载进度
+```java
+/**
+ * 如果想知道下载的情况，需要注册该广播
+ */
+// 注册广播接收器，接收下载进度信息和结束信息
+IntentFilter filter = new IntentFilter();
+filter.addAction(IntentAction.ACTION_UPDATE);   //
+filter.addAction(IntentAction.ACTION_FINISH);   //结束时
+filter.addAction(IntentAction.ACTION_PAUSE);    //暂停
+filter.addAction(IntentAction.ACTION_FAILE);    //下载失败
+filter.addAction(IntentAction.ACTION_WAIT_DownLoad);    //进入下载队列等待下载
+registerReceiver(mReceiver, filter);
+
+  BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            OtherMessage otherMessage = (OtherMessage) intent.getSerializableExtra(KeyName.OTHER_MESSAGE); //获取我们的自定义消息
+//            int finished = intent.getIntExtra(KeyName.FINISHED_TAG, 0); //获取下载总长度
+//            double rate = intent.getDoubleExtra(KeyName.DOWNLOAD_RATE_TAG, 0); //下载速度
+//            FileInfo mFileInfo = (FileInfo) intent.getSerializableExtra(KeyName.FILEINFO_TAG); //直接返回下载文件
+             //判断 intent.getAction()
+             if(IntentAction.ACTION_UPDATE.equer(intent.getAction())){
+
+             }else if(){
+
+             }else if
+             .....
+       }
+    };
+//
 ```
