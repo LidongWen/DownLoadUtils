@@ -3,7 +3,7 @@
  ## 用法
 ```groovy
 dependencies {
-    compile 'com.github.LidongWen:DownLoadUtils:1.1.0'
+    compile 'com.github.LidongWen:DownLoadUtils:1.0.3'
 }
 ```
 ## 目前对以下需求进行了封装
