@@ -10,9 +10,12 @@ compile 'com.github.LidongWen:DownLoadUtils:1.0.3'
 * 继续下载
 * 重新下载
 * 文件 DB 操作
-* 获取下载列表（All）
-* 获取下载列表（暂停||下载中 未完成列表）
-* 获取下载列表（已完成列表）
+> 数据库 DB 操作
+> 获取下载列表（All）
+> 获取下载列表（暂停||下载中 未完成列表）
+> 获取下载列表（已完成列表）
+* 下载设置
+>设置最大下载文件数量
 
 ##初始化
 ```java
@@ -77,3 +80,9 @@ DownloadUtils.getFileInfosByDownLoading();
 ```java
 DownloadUtils.getFileInfosByFinished();
 ```
+## 下载设置
+```java
+//设置最大下载文件数量
+DownloadUtils.setFileMaxNum(int maxNum);
+```
+

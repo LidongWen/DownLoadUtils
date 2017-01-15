@@ -37,6 +37,12 @@ public class DownloadUtils {
         return DownloadConfig.getDestFileDir();
     }
 
+    public static void setFileMaxNum(int maxNum){
+        if(maxNum<1)
+            throw new NullPointerException("the num not less than 1");
+        DownloadConfig.setFileMaxNum(maxNum);
+    }
+
     /**
      * 获取DB 操作数据库
      *

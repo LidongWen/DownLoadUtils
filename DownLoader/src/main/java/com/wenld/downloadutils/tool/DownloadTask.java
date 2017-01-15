@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.wenld.downloadutils.constant.DownloadConfig.getFileMaxNum;
+
 
 /**
  * 下载任务类
@@ -62,7 +64,7 @@ public class DownloadTask<T> {
     /**
      * 带缓存线程池，s开头表示用到static关键字
      */
-    public static ExecutorService sExecutorService = Executors.newFixedThreadPool(4);
+    public static ExecutorService sExecutorService = Executors.newFixedThreadPool(getFileMaxNum());
 
 
     public T postion;
@@ -102,6 +104,7 @@ public class DownloadTask<T> {
             new FileInfoDB().insert(mFileInfo);
         }
 
+        mFileInfo.setOver(false);
         Intent intent = new Intent(IntentAction.ACTION_WAIT_DownLoad);
         intent.putExtra(KeyName.FILEINFO_TAG, mFileInfo);
         intent.putExtra(KeyName.OTHER_MESSAGE, ((Serializable) postion));

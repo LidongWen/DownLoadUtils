@@ -10,6 +10,10 @@ public class DownloadConfig {
      */
     public static int DONWNLOAD_THREAD_NUM = 1;
     /**
+     * 最大下载文件数
+     */
+    public static int DOWNLOAD_MAX_NUM = 4;
+    /**
      * 文件下载后在本地的保存路径
      */
     public static String destFileDir = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DOWNLOADS + "/多线程断点续传下载";//下载文件目录
@@ -60,5 +64,12 @@ public class DownloadConfig {
      */
     public static int getFileThreadNum() {
         return DONWNLOAD_THREAD_NUM;
+    }
+
+    public static int getFileMaxNum() {
+        return DOWNLOAD_MAX_NUM;
+    }
+    public static void setFileMaxNum(int maxNum){
+        DOWNLOAD_MAX_NUM=maxNum;
     }
 }

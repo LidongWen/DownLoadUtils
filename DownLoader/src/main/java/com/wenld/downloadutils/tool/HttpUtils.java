@@ -27,17 +27,21 @@ import javax.net.ssl.X509TrustManager;
 public class HttpUtils {
     protected static final String ALLOWED_URI_CHARS = "@#&=*+-_.,:!?()/~'%";
     protected static final String CHARSET = "UTF-8";
-    /** 建立连接的超时时间 */
+    /**
+     * 建立连接的超时时间
+     */
     protected static final int connectTimeout = 5 * 1000;
-    /** 建立到资源的连接后从 input 流读入时的超时时间 */
+    /**
+     * 建立到资源的连接后从 input 流读入时的超时时间
+     */
     protected static final int readTimeout = 10 * 1000;
 
     private static HttpUtils instance;
 
-    private TrustManager[] trustAllCerts = { new X509TrustManager() {
+    private TrustManager[] trustAllCerts = {new X509TrustManager() {
 
         public X509Certificate[] getAcceptedIssuers() {
-            return null;
+            return new java.security.cert.X509Certificate[]{};
         }
 
         public void checkClientTrusted(X509Certificate[] certs, String authType) {
@@ -47,7 +51,7 @@ public class HttpUtils {
         public void checkServerTrusted(X509Certificate[] certs, String authType) {
 
         }
-    } };
+    }};
 
     public static HttpUtils getInstance() {
         if (instance == null) {
@@ -75,9 +79,36 @@ public class HttpUtils {
         }
     }
 
+    private HttpURLConnection setVerifier(URL ur) {
+        HttpsURLConnection conn = null;
+        try {
+            conn = (HttpsURLConnection) ur
+                    .openConnection();
+            conn.setDefaultHostnameVerifier(new NullHostNameVerifier());
+            SSLContext sc = null;
+            sc = SSLContext.getInstance("TLS");
+            sc.init(null, trustAllCerts, new SecureRandom());
+            conn.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            conn.setConnectTimeout(connectTimeout);
+            conn.setReadTimeout(readTimeout);
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return conn;
+    }
+
     public HttpURLConnection createConnection(String url) throws IOException {
         String encodedUrl = Uri.encode(url, ALLOWED_URI_CHARS);
-        HttpURLConnection conn = (HttpURLConnection) new URL(encodedUrl)
+        URL ur = new URL(encodedUrl);
+        if (ur.getProtocol().toLowerCase().equals("https")) {
+            return setVerifier(ur);
+        }
+        HttpURLConnection conn = (HttpURLConnection) ur
                 .openConnection();
         conn.setConnectTimeout(connectTimeout);
         conn.setReadTimeout(readTimeout);
