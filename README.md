@@ -5,7 +5,7 @@
 
 <img width="320" height="548" src="https://github.com/LidongWen/DownLoadUtils/blob/master/img/GIF.gif"></img>
 
- ## 用法
+## 用法
 
 ```groovy
 dependencies {
