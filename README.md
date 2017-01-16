@@ -3,13 +3,12 @@
  基本功能 ：开始下载 暂停下载 等下载功能<br/>
  自定义： Https 证书、设置下载地址、 最大下载文件数量等...
 
-
 ## 示例图
-
 <img width="320" height="548" src="https://github.com/LidongWen/DownLoadUtils/blob/master/img/GIF.gif"></img>
+## 示例下载  https://fir.im/downLoad
+![](img/download.png)
 
 ## 用法
-
 ```groovy
 // 项目引用
 dependencies {
