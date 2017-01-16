@@ -3,7 +3,7 @@
 
 示例图
 
- ![](img/GIF.gif)
+<img width="160" height=“274” src="https://github.com/LidongWen/DownLoadUtils/blob/master/img/GIF.gif"></img>
 
  ## 用法
 
@@ -19,15 +19,15 @@ dependencies {
 * 重新下载
 * 下载时的数据回传监听
 * 文件 DB 操作
-* > 数据库 DB 操作
-* > 获取下载列表（All）
-* > 获取下载列表（暂停||下载中 未完成列表）
-* > 获取下载列表（已完成列表）
+ > 数据库 DB 操作
+ > 获取下载列表（All）
+ > 获取下载列表（暂停||下载中 未完成列表）
+ > 获取下载列表（已完成列表）
 
 
 * 下载设置
-*  > 设置最大下载文件数量
-*  > 支持 Https
+ > 设置最大下载文件数量
+ > 支持 Https
 
 ##初始化
 ```java
