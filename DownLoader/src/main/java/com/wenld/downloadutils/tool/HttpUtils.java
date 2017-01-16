@@ -2,7 +2,6 @@ package com.wenld.downloadutils.tool;
 
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -12,17 +11,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 public class HttpUtils {
     protected static final String ALLOWED_URI_CHARS = "@#&=*+-_.,:!?()/~'%";
@@ -38,20 +28,25 @@ public class HttpUtils {
 
     private static HttpUtils instance;
 
-    private TrustManager[] trustAllCerts = {new X509TrustManager() {
+    public static void setSslParams(SSLParams sslParams) {
+        HttpUtils.sslParams = sslParams;
+    }
 
-        public X509Certificate[] getAcceptedIssuers() {
-            return new java.security.cert.X509Certificate[]{};
-        }
-
-        public void checkClientTrusted(X509Certificate[] certs, String authType) {
-
-        }
-
-        public void checkServerTrusted(X509Certificate[] certs, String authType) {
-
-        }
-    }};
+    private static SSLParams sslParams;
+//    private TrustManager[] trustAllCerts = {new X509TrustManager() {
+//
+//        public X509Certificate[] getAcceptedIssuers() {
+//            return new java.security.cert.X509Certificate[]{};
+//        }
+//
+//        public void checkClientTrusted(X509Certificate[] certs, String authType) {
+//
+//        }
+//
+//        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+//
+//        }
+//    }};
 
     public static HttpUtils getInstance() {
         if (instance == null) {
@@ -64,37 +59,50 @@ public class HttpUtils {
         return instance;
     }
 
-    private HttpUtils() {
-        try {
-            HttpsURLConnection
-                    .setDefaultHostnameVerifier(new NullHostNameVerifier());
-            SSLContext sc = SSLContext.getInstance("TLS");
-            sc.init(null, trustAllCerts, new SecureRandom());
-            HttpsURLConnection
-                    .setDefaultSSLSocketFactory(sc.getSocketFactory());
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-    }
+//
+//    public void setSSL(InputStream caInput) {
+//        try {
+//            CertificateFactory cf = null;
+//            cf = CertificateFactory.getInstance("X.509");
+//            Certificate ca;
+//            ca = cf.generateCertificate(caInput);
+//            String keyStoreType = KeyStore.getDefaultType();
+//            KeyStore keyStore = null;
+//            keyStore = KeyStore.getInstance(keyStoreType);
+//            keyStore.load(null, null);
+//            keyStore.setCertificateEntry("ca", ca);
+//
+//            String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+//            TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+//            tmf.init(keyStore);
+//
+//            context = SSLContext.getInstance("TLS");
+//            context.init(null, tmf.getTrustManagers(), null);
+//
+//        } catch (CertificateException e) {
+//            e.printStackTrace();
+//        } catch (KeyStoreException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        } catch (KeyManagementException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private HttpURLConnection setVerifier(URL ur) {
         HttpsURLConnection conn = null;
         try {
-            conn = (HttpsURLConnection) ur
-                    .openConnection();
-            conn.setDefaultHostnameVerifier(new NullHostNameVerifier());
-            SSLContext sc = null;
-            sc = SSLContext.getInstance("TLS");
-            sc.init(null, trustAllCerts, new SecureRandom());
-            conn.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            if(sslParams!=null){
+                conn = (HttpsURLConnection) ur
+                        .openConnection();
+                conn.setDefaultHostnameVerifier(new SSLParams.UnSafeHostnameVerifier());
+                conn.setDefaultSSLSocketFactory(sslParams.sSLSocketFactory);
+            }
             conn.setConnectTimeout(connectTimeout);
             conn.setReadTimeout(readTimeout);
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -234,17 +242,6 @@ public class HttpUtils {
         // HTTP connection reuse which was buggy pre-froyo
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
             System.setProperty("http.keepAlive", "false");
-        }
-    }
-
-    private class NullHostNameVerifier implements HostnameVerifier {
-        public NullHostNameVerifier() {
-
-        }
-
-        public boolean verify(String hostname, SSLSession session) {
-            Log.i("RestUtilImpl", "Approving certificate for " + hostname);
-            return true;
         }
     }
 }

@@ -9,8 +9,11 @@ import com.wenld.downloadutils.constant.DownloadConfig;
 import com.wenld.downloadutils.db.AbstractDatabaseManager;
 import com.wenld.downloadutils.db.FileInfoDB;
 import com.wenld.downloadutils.tool.DownLoadBinder;
+import com.wenld.downloadutils.tool.HttpUtils;
+import com.wenld.downloadutils.tool.SSLParams;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -41,10 +44,21 @@ public class DownloadUtils {
         return DownloadConfig.getDestFileDir();
     }
 
-    public static void setFileMaxNum(int maxNum){
-        if(maxNum<1)
+    public static void setFileMaxNum(int maxNum) {
+        if (maxNum < 1)
             throw new NullPointerException("the num not less than 1");
         DownloadConfig.setFileMaxNum(maxNum);
+    }
+
+    /**
+     * https 验证
+     *
+     * @param certificates
+     * @param bksFile
+     * @param password
+     */
+    public static void setSsl(InputStream[] certificates, InputStream bksFile, String password) {
+        HttpUtils.getInstance().setSslParams(SSLParams.getSslSocketFactory(certificates, bksFile, password));
     }
 
     /**
