@@ -1,7 +1,7 @@
 # DownLoadUtils
  实现文件 多线程断点下载
 
-示例图
+## 示例图
 
 <img width="240" height="411" src="https://github.com/LidongWen/DownLoadUtils/blob/master/img/GIF.gif"></img>
 
