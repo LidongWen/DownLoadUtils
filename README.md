@@ -112,7 +112,7 @@ filter.addAction(IntentAction.ACTION_PAUSE);    //暂停
 filter.addAction(IntentAction.ACTION_FAILE);    //下载失败
 filter.addAction(IntentAction.ACTION_WAIT_DownLoad);    //进入下载队列等待下载
 registerReceiver(mReceiver, filter);
-
+```
 
 ## 文件 DB 操作
 ```java
