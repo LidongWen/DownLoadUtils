@@ -3,7 +3,7 @@
 
 示例图
 
-<img width="160" height=“274” src="https://github.com/LidongWen/DownLoadUtils/blob/master/img/GIF.gif"></img>
+<img width="240" height="411" src="https://github.com/LidongWen/DownLoadUtils/blob/master/img/GIF.gif"></img>
 
  ## 用法
 
