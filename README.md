@@ -11,8 +11,29 @@
 ## 用法
 
 ```groovy
+// 项目引用
 dependencies {
-    compile 'com.github.LidongWen:DownLoadUtils:1.0.3'
+    compile 'com.github.LidongWen:DownLoadUtils:1.0.4'
+}
+
+// 根目录下引用
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        maven { url "https://www.jitpack.io" }
+    }
 }
 ```
 ## 目前对以下需求进行了封装
