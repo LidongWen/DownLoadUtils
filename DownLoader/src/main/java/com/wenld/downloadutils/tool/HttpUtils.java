@@ -95,12 +95,13 @@ public class HttpUtils {
     private HttpURLConnection setVerifier(URL ur) {
         HttpsURLConnection conn = null;
         try {
-            if(sslParams!=null){
-                conn = (HttpsURLConnection) ur
-                        .openConnection();
-                conn.setDefaultHostnameVerifier(new SSLParams.UnSafeHostnameVerifier());
-                conn.setDefaultSSLSocketFactory(sslParams.sSLSocketFactory);
+            conn = (HttpsURLConnection) ur
+                    .openConnection();
+            if (sslParams == null) {
+                sslParams = SSLParams.getSslSocketFactory(null, null, null);
             }
+            conn.setDefaultHostnameVerifier(new SSLParams.UnSafeHostnameVerifier());
+            conn.setDefaultSSLSocketFactory(sslParams.sSLSocketFactory);
             conn.setConnectTimeout(connectTimeout);
             conn.setReadTimeout(readTimeout);
         } catch (IOException e) {
