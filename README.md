@@ -4,6 +4,7 @@
  ![](img/GIF.gif)
 
  ## 用法
+
 ```groovy
 dependencies {
     compile 'com.github.LidongWen:DownLoadUtils:1.0.3'
