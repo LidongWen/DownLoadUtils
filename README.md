@@ -1,7 +1,7 @@
 # DownLoadUtils
  实现文件 多线程断点下载
 
- ![](GIF.gif)
+ ![](img/GIF.gif)
 
  ## 用法
 ```groovy
