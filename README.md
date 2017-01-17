@@ -103,7 +103,7 @@ DownloadUtils.ReDownLoad(MainActivity.this, item, otherMessage);
 /**
  * 如果想知道下载的情况，需要注册该广播
  */
-// 注册广播接收器，接收下载进度信息和结束信息
+// 广播的分类
 IntentFilter filter = new IntentFilter();
 filter.addAction(IntentAction.ACTION_UPDATE);   //
 filter.addAction(IntentAction.ACTION_FINISH);   //结束时
@@ -111,6 +111,29 @@ filter.addAction(IntentAction.ACTION_PAUSE);    //暂停
 filter.addAction(IntentAction.ACTION_FAILE);    //下载失败
 filter.addAction(IntentAction.ACTION_WAIT_DownLoad);    //进入下载队列等待下载
 registerReceiver(mReceiver, filter);
+
+//数据参数
+  /**
+     * 【下载进度】的key名称
+     */
+    public static final String FINISHED_TAG = "finished";
+    /**
+     * 【下载速率】的key名称
+     */
+    public static final String DOWNLOAD_RATE_TAG = "rate";
+    /**
+     * 【文件id】的key
+     */
+    public static final String ID_Postion = "id";
+    /**
+     * 【下载文件】的key名称
+     */
+    public static final String FILEINFO_TAG = "fileInfo";
+    /**
+     * 【其他信息】
+     */
+    public static final String OTHER_MESSAGE = "other_Message";
+
 ```
 
 ## 文件 DB 操作
@@ -148,4 +171,5 @@ DownloadUtils.setSsl(证书的inputstream,
     本地证书的inputstream,
     本地证书的密码)
 ```
-
+# Contact me
+blog: [wenld's blog](http://blog.csdn.net/sinat_15877283)
