@@ -4,7 +4,7 @@
  自定义： Https 证书、设置下载地址、 最大下载文件数量等...
 
 ## 示例图
-<img width="320" height="548" src="https://github.com/LidongWen/DownLoadUtils/blob/master/img/GIF.gif"></img>
+<img width="320" height="520" src="https://github.com/LidongWen/DownLoadUtils/blob/master/img/GIF.gif"></img>
 ## 示例下载  https://fir.im/downLoad
 ![](img/download.png)
 
