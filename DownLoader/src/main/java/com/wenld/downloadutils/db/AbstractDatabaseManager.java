@@ -7,6 +7,7 @@ package com.wenld.downloadutils.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -31,7 +32,7 @@ public abstract class AbstractDatabaseManager<M, K> implements IDatabase<M, K> {
     /**
      * The Android Activity reference for access to DatabaseManager.
      */
-    private static DBOpenHelper mHelper;
+    private static SQLiteOpenHelper mHelper;
     protected static DaoSession daoSession;
 
     /**
@@ -86,7 +87,7 @@ public abstract class AbstractDatabaseManager<M, K> implements IDatabase<M, K> {
     /**
      * 在applicaiton中初始化DatabaseHelper
      */
-    private static DBOpenHelper getOpenHelper(@NonNull Context context, @Nullable String dataBaseName) {
+    private static SQLiteOpenHelper getOpenHelper(@NonNull Context context, @Nullable String dataBaseName) {
         closeDbConnections();
         return new DBOpenHelper(context, dataBaseName, null, DaoMaster.SCHEMA_VERSION);//new DaoMaster.DevOpenHelper(context, dataBaseName, null);
     }
