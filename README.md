@@ -67,27 +67,27 @@ public class MyApp extends Application {
 }
 ```
 ##下载文件
-| void name           | direction  |
+| DownLoadUtils          | direction  |
 | ------------- | :-----:|
 | startDownload(Context mContext, String url, String fileName, T mes) | mes:自定义数据 |
 | startDownload(Context mContext, String id, String url, String fileName, T mes) | 自定义ID，mes:自定义数据 |
 | startDownload(Context mContext, FileInfo mFileInfo, T msg)    |  |
 
 ##暂停
-| | |
+|DownLoadUtils | |
 | ------------- | :-----:|
 | stopById(String id)  |  |
 | stop(FileInfo mFileInfo) |  |
 
 ##继续下载
-| | |
+| DownLoadUtils| |
 | ------------- | :-----:|
 | startDownload(Context mContext, String url, String fileName, T mes) | mes:自定义数据 |
 | startDownload(Context mContext, String id, String url, String fileName, T mes) | 自定义ID，mes:自定义数据 |
 | startDownload(Context mContext, FileInfo mFileInfo, T msg)    |  |
 
 ##重新下载
-| | |
+| DownLoadUtils | |
 | ------------- | :-----:|
 | ReDownLoadById(Context mContext, String id, T msg) |  |
 | ReDownLoad(Context mContext, String url, T msg) |  |
@@ -134,22 +134,22 @@ registerReceiver(mReceiver, filter);
 
 ## 文件 DB 操作
 ```java
-DownLoadSetting.getFileDB().selectByPrimaryKey();
+DownLoadUtils.getFileDB().selectByPrimaryKey();
 List list= DownloadUtils.getFileDB().getQueryBuilder().where(FileInfoDao.Properties.Id.eq(threeModel.getId())).list();
 //等等一系列的数据库操作
 ```
 ## 获取下载列表
 ```java
-DownLoadSetting.getAllFileInfos();
+DownLoadUtils.getAllFileInfos();
 ```
 
 ## 获取下载列表（暂停||下载中 未完成列表）
 ```java
-DownLoadSetting.getFileInfosByDownLoading();
+DownLoadUtils.getFileInfosByDownLoading();
 ```
 ## 获取下载列表（已完成列表）
 ```java
-DownLoadSetting.getFileInfosByFinished();
+DownLoadUtils.getFileInfosByFinished();
 ```
 
 ## 设置同时最大下载数

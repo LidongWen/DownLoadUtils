@@ -194,7 +194,6 @@ public class MainActivity extends AppCompatActivity {
                 mFileInfo.setUrl(threeModel.getFile_url());
                 mFileInfo.setId(threeModel.getId());
                 mFileInfo.setFileName(threeModel.getFile_name());
-                mFileInfo.setMd5(threeModel.getFile_url());
                 adapter.getFileInfoMap().put(mFileInfo.getId(), mFileInfo);
             }
         }
