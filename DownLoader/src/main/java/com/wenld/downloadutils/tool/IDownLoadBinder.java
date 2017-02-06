@@ -10,7 +10,7 @@ import com.wenld.downloadutils.bean.FileInfo;
 public interface IDownLoadBinder {
     <T> void startDownload(Context mContext, FileInfo mFileInfo, T postion);
 
-    <T> void stop(FileInfo mFileInfo, T postion);
+    <T> void stop(FileInfo mFileInfo);
 
     void allStop();
 

@@ -97,62 +97,72 @@ public class DownloadUtils {
         return getFileDB().getQueryBuilder().where(ThreadInfoDao.Properties.Over.eq(true)).list();
     }
 
-    public static <T> void startDownload(Context mContext, String id, String url, String fileName, T postion) {
+    public static <T> void startDownload(Context mContext, String id, String url, String fileName, T msg) {
         FileInfo mFileInfo = new FileInfo();
         mFileInfo.setUrl(url);
         mFileInfo.setId(id);
         mFileInfo.setFileName(fileName);
         mFileInfo.setMd5(url);
-        startDownload(mContext, mFileInfo, postion);
+        startDownload(mContext, mFileInfo, msg);
     }
 
-    public static <T> void startDownload(Context mContext, String url, String fileName, T postion) {
+    public static <T> void startDownload(Context mContext, String url, String fileName, T msg) {
         FileInfo mFileInfo = new FileInfo();
         mFileInfo.setUrl(url);
         mFileInfo.setId(url);
         mFileInfo.setFileName(fileName);
         mFileInfo.setMd5(url);
-        startDownload(mContext, mFileInfo, postion);
+        startDownload(mContext, mFileInfo, msg);
     }
 
-    public static <T> void startDownload(Context mContext, FileInfo mFileInfo, T postion) {
-        DownLoadBinder.getInstance().startDownload(mContext, mFileInfo, postion);
+    public static <T> void startDownload(Context mContext, FileInfo mFileInfo, T msg) {
+        DownLoadBinder.getInstance().startDownload(mContext, mFileInfo, msg);
     }
 
-    public static <T> void stop(FileInfo mFileInfo, T postion) {
-        DownLoadBinder.getInstance().stop(mFileInfo, postion);
+    public static <T> void stopById(String id) {
+        FileInfo mFileInfo = new FileInfo();
+        mFileInfo.setId(id);
+        DownLoadBinder.getInstance().stop(mFileInfo);
+    }
+    public static <T> void stop(FileInfo mFileInfo) {
+        DownLoadBinder.getInstance().stop(mFileInfo);
     }
 
     public static void allStop() {
 //        DownLoadBinder.getInstance().allStop();
     }
 
-    public static <T> void ReDownLoadById(Context mContext, String id, T postion) {
+    public static <T> void ReDownLoadById(Context mContext, String id, T msg) {
         FileInfo mFileInfo = new FileInfo();
         mFileInfo.setId(id);
-        ReDownLoad(mContext, mFileInfo, postion);
+        ReDownLoad(mContext, mFileInfo, msg);
     }
 
-    public static <T> void ReDownLoad(Context mContext, String url, T postion) {
+    public static <T> void ReDownLoad(Context mContext, String url, T msg) {
         FileInfo mFileInfo = new FileInfo();
         mFileInfo.setId(url);
-        ReDownLoad(mContext, mFileInfo, postion);
+        ReDownLoad(mContext, mFileInfo, msg);
     }
 
     /**
      * 重新下载
      *
      * @param mFileInfo
-     * @param postion
+     * @param msg
      * @param <T>
      */
-    public static <T> void ReDownLoad(Context mContext, FileInfo mFileInfo, T postion) {
-        DownLoadBinder.getInstance().ReDownLoad(mContext, mFileInfo, postion);
+    public static <T> void ReDownLoad(Context mContext, FileInfo mFileInfo, T msg) {
+        DownLoadBinder.getInstance().ReDownLoad(mContext, mFileInfo, msg);
     }
 
+    public static <T> void deleteById(String id, T msg) {
+        FileInfo mFileInfo = new FileInfo();
+        mFileInfo.setId(id);
+        DownLoadBinder.getInstance().delete(mFileInfo, msg);
+    }
     // TODO: 2017/1/10 删除完以后 通知这块 判断逻辑还需要优化
-    public static <T> void delete(FileInfo mFileInfo, T postion) {
-        DownLoadBinder.getInstance().delete(mFileInfo, postion);
+    public static <T> void delete(FileInfo mFileInfo, T msg) {
+        DownLoadBinder.getInstance().delete(mFileInfo, msg);
     }
 
     public static void deleteAll() {

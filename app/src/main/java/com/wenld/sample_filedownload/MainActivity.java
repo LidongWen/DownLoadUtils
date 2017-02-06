@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 /**
                  * 暂停下载
                  */
-                DownloadUtils.stop(item, null);
+                DownloadUtils.stop(item);
             }
 
             @Override

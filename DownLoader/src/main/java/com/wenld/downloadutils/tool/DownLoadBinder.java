@@ -56,7 +56,7 @@ public class DownLoadBinder extends Binder implements IDownLoadBinder {
         }
     }
 
-    public <T> void stop(FileInfo mFileInfo, T postion) {
+    public <T> void stop(FileInfo mFileInfo) {
         if (mFileInfo == null) {
             throw new NullPointerException("");
         }
@@ -123,7 +123,7 @@ public class DownLoadBinder extends Binder implements IDownLoadBinder {
             throw new NullPointerException("");
         }
 
-        stop(mFileInfo, postion);
+        stop(mFileInfo);
         new FileInfoDB().delete(mFileInfo);
         new ThreadInfoDB().deleteList(new ThreadInfoDB().getQueryBuilder().where(ThreadInfoDao.Properties.FileId.eq(mFileInfo.getId())).list());
     }

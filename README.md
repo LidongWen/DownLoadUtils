@@ -66,46 +66,32 @@ public class MyApp extends Application {
 }
 ```
 ##下载文件
-三种方式
-```java
-  /**
-   * 开始下载/继续下载
-   */
-  DownloadUtils.startDownload(MainActivity.this, item, otherMessage);
-```
-```
-    /**
-    *  自定义ID 的下载
-    **/
-    startDownload(Context mContext, String id, String url, String fileName, T postion);
-```
-```
-   startDownload(Context mContext, String url, String fileName, T postion);
-```
+| void name           | direction  |
+| ------------- | :-----:|
+| startDownload(Context mContext, String url, String fileName, T mes) | mes:自定义数据 |
+| startDownload(Context mContext, String id, String url, String fileName, T mes) | 自定义ID，mes:自定义数据 |
+| startDownload(Context mContext, FileInfo mFileInfo, T msg)    |  |
+
 ##暂停
-```java
-/**
- * 暂停下载
- */
-DownloadUtils.stop(item, null);
-```
+
+| ------------- | :-----:|
+| stopById(String id)  |  |
+| stop(FileInfo mFileInfo) |  |
 
 ##继续下载
-```java
-/**
- * 继续下载
- */
-DownloadUtils.startDownload(MainActivity.this, item, otherMessage);
-```
 
+| ------------- | :-----:|
+| startDownload(Context mContext, String url, String fileName, T mes) | mes:自定义数据 |
+| startDownload(Context mContext, String id, String url, String fileName, T mes) | 自定义ID，mes:自定义数据 |
+| startDownload(Context mContext, FileInfo mFileInfo, T msg)    |  |
 
 ##重新下载
-```java
-/**
- * 重新下载
- */
-DownloadUtils.ReDownLoad(MainActivity.this, item, otherMessage);
-```
+
+| ------------- | :-----:|
+| ReDownLoadById(Context mContext, String id, T msg) |  |
+| ReDownLoad(Context mContext, String url, T msg) |  |
+| ReDownLoad(Context mContext, FileInfo mFileInfo, T msg)  | |
+
 ## 下载时的数据回传监听
 实时 获取下载文件的进度,这边通过广播来接收下载进度
 ```java
