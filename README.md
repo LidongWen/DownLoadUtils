@@ -73,25 +73,22 @@ public class MyApp extends Application {
 | startDownload(Context mContext, FileInfo mFileInfo, T msg)    |  |
 
 ##暂停
-
-
-| stopById(String id)  |  |
+| | |
 | ------------- | :-----:|
+| stopById(String id)  |  |
 | stop(FileInfo mFileInfo) |  |
 
 ##继续下载
-
-
-| startDownload(Context mContext, String url, String fileName, T mes) | mes:自定义数据 |
+| | |
 | ------------- | :-----:|
+| startDownload(Context mContext, String url, String fileName, T mes) | mes:自定义数据 |
 | startDownload(Context mContext, String id, String url, String fileName, T mes) | 自定义ID，mes:自定义数据 |
 | startDownload(Context mContext, FileInfo mFileInfo, T msg)    |  |
 
 ##重新下载
-
-
-| ReDownLoadById(Context mContext, String id, T msg) |  |
+| | |
 | ------------- | :-----:|
+| ReDownLoadById(Context mContext, String id, T msg) |  |
 | ReDownLoad(Context mContext, String url, T msg) |  |
 | ReDownLoad(Context mContext, FileInfo mFileInfo, T msg)  | |
 
