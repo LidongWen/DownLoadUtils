@@ -12,7 +12,7 @@
 ```groovy
 // 项目引用
 dependencies {
-    compile 'com.github.LidongWen:DownLoadUtils:1.0.4'
+    compile 'com.github.LidongWen:DownLoadUtils:1.2.0'
 }
 
 // 根目录下引用
@@ -133,38 +133,41 @@ registerReceiver(mReceiver, filter);
 
 ## 文件 DB 操作
 ```java
-DownloadUtils.getFileDB().selectByPrimaryKey();
+DownLoadSetting.getFileDB().selectByPrimaryKey();
 List list= DownloadUtils.getFileDB().getQueryBuilder().where(FileInfoDao.Properties.Id.eq(threeModel.getId())).list();
 //等等一系列的数据库操作
 ```
 ## 获取下载列表
 ```java
-DownloadUtils.getAllFileInfos();
+DownLoadSetting.getAllFileInfos();
 ```
 
 ## 获取下载列表（暂停||下载中 未完成列表）
 ```java
-DownloadUtils.getFileInfosByDownLoading();
+DownLoadSetting.getFileInfosByDownLoading();
 ```
 ## 获取下载列表（已完成列表）
 ```java
-DownloadUtils.getFileInfosByFinished();
+DownLoadSetting.getFileInfosByFinished();
 ```
 
 ## 支持 Https
 * 设置支持所有的https
 ```java
-DownloadUtils.setSsl(null,null,null);
+DownLoadSetting.setSsl(null,null,null);
 ```
 * 设置具体的证书
 ```java
-DownloadUtils.setSsl(证书的inputstream, null, null);
+DownLoadSetting.setSsl(证书的inputstream, null, null);
 ```
 * 双向认证
 ```java
-DownloadUtils.setSsl(证书的inputstream,
+DownLoadSetting.setSsl(证书的inputstream,
     本地证书的inputstream,
     本地证书的密码)
 ```
+
 # Contact me
+E-mail:wenld2014@163.com
+
 blog: [wenld's blog](http://blog.csdn.net/sinat_15877283)

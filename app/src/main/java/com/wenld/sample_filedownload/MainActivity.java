@@ -4,10 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
      * UI
      */
     RecyclerView rlvAty;
-    SwipeRefreshLayout mSwipeLayout;
     PdfThreeAdapter adapter;
     /**
      * data
@@ -71,17 +68,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout_fagment_three);
         this.rlvAty = (RecyclerView) findViewById(R.id.rlv_fagment_three);
         adapter = new PdfThreeAdapter(this);
         rlvAty.setLayoutManager(new LinearLayoutManager(this));
         rlvAty.setAdapter(adapter);
 
-        mSwipeLayout.setColorSchemeColors(Color.BLUE,
-                Color.GREEN,
-                Color.YELLOW,
-                Color.RED);
-        mSwipeLayout.setSize(SwipeRefreshLayout.LARGE);
     }
 
     private void initData() {
@@ -91,15 +82,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initListener() {
-        mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mSwipeLayout.setRefreshing(false);
-            }
-        });
         adapter.setLoderListener(new PdfThreeAdapter.IDownLoderListener() {
             @Override
-            public void start(FileInfo item, int position) {
+            public void start(String id, String url, String fileName, int position) {
                 /**
                  * 自定义消息
                  */
@@ -109,19 +94,19 @@ public class MainActivity extends AppCompatActivity {
                 /**
                  * 开始下载/继续下载
                  */
-                DownloadUtils.startDownload(MainActivity.this, item, otherMessage);
+                DownloadUtils.startDownload(MainActivity.this, id, url, fileName, otherMessage);
             }
 
             @Override
-            public void stop(FileInfo item, int position) {
+            public void stop(String id, int position) {
                 /**
                  * 暂停下载
                  */
-                DownloadUtils.stop(item);
+                DownloadUtils.stopById(id);
             }
 
             @Override
-            public void reload(FileInfo item, int position) {
+            public void reload(String id, int position) {
                 /**
                  * 自定义消息
                  */
@@ -131,11 +116,11 @@ public class MainActivity extends AppCompatActivity {
                 /**
                  *
                  */
-                DownloadUtils.ReDownLoad(MainActivity.this, item, otherMessage);
+                DownloadUtils.ReDownLoadById(MainActivity.this, id, otherMessage);
             }
 
             @Override
-            public void delete(FileInfo item, int position) {
+            public void delete(String id, int position) {
                 /**
                  * 自定义消息
                  */
@@ -143,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 otherMessage.setPostion(position);
                 otherMessage.setId("1");
 
-                DownloadUtils.delete(item, otherMessage);
+                DownloadUtils.delete(id, otherMessage);
             }
         });
     }
@@ -158,9 +143,6 @@ public class MainActivity extends AppCompatActivity {
 //            int finished = intent.getIntExtra(KeyName.FINISHED_TAG, 0); //获取下载总长度
 //            double rate = intent.getDoubleExtra(KeyName.DOWNLOAD_RATE_TAG, 0); //下载速度
 //            FileInfo mFileInfo = (FileInfo) intent.getSerializableExtra(KeyName.FILEINFO_TAG); //直接返回下载文件
-
-            if (mDatas == null || mDatas.size() < 1)
-                return;
 
             if (IntentAction.ACTION_WAIT_DownLoad.equals(intent.getAction())) {
                 FileInfo mFileInfo = (FileInfo) intent.getSerializableExtra(KeyName.FILEINFO_TAG);
@@ -223,8 +205,6 @@ public class MainActivity extends AppCompatActivity {
     public void bindList(List<ThreeModel> mDatas) {
         adapter.setData(mDatas);
         adapter.notifyDataSetChanged();
-        if (mSwipeLayout.isRefreshing())
-            mSwipeLayout.setRefreshing(false);
     }
 
     public void updateUIbyPostion(FileInfo fileInfo, int postion) {
@@ -245,23 +225,7 @@ public class MainActivity extends AppCompatActivity {
                 if (fileInfo == null)
                     return;
 
-                if (fileInfo.getFinished() != null && fileInfo.getFinished() > 0 && fileInfo.getLength() != null && fileInfo.getLength() > 0) {
-                    viewHolder.flikerbar_item_pdfthree.setProgress((int) (((double) fileInfo.getFinished() / (double) fileInfo.getLength()) * 100));
-                }
-                // 完成
-                if (fileInfo.getOver() != null && fileInfo.getOver()) {
-                    viewHolder.flikerbar_item_pdfthree.finishLoad();
-                } else {
-                    if (fileInfo.getIsDownload()) {
-                        viewHolder.flikerbar_item_pdfthree.processingLoad();
-                    } else {
-                        if (fileInfo.getFinished() != null && fileInfo.getFinished() > 0) {
-                            viewHolder.flikerbar_item_pdfthree.pauseLoad();
-                        } else {
-                            viewHolder.flikerbar_item_pdfthree.unBeginLoad();
-                        }
-                    }
-                }
+                adapter.bindProgress(viewHolder, fileInfo);
             } else {
                 adapter.notifyItemChanged(postion);
             }

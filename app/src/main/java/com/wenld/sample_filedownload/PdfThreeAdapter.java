@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.wenld.downloadutils.DownLoadStutasUtil;
 import com.wenld.downloadutils.bean.FileInfo;
 import com.wenld.sample_filedownload.adapterRecy.AdvancedAdapter;
 import com.wenld.sample_filedownload.tool.StringUtils;
@@ -25,7 +26,7 @@ import java.util.Map;
  */
 public class PdfThreeAdapter extends AdvancedAdapter<PdfThreeAdapter.Holder, ThreeModel> {
     Context mContext;
-    public Map<String, FileInfo> fileInfoMap=new HashMap<>();
+    public Map<String, FileInfo> fileInfoMap = new HashMap<>();
 
     public Map<String, FileInfo> getFileInfoMap() {
         return fileInfoMap;
@@ -62,22 +63,40 @@ public class PdfThreeAdapter extends AdvancedAdapter<PdfThreeAdapter.Holder, Thr
         if (fileInfo == null)
             return;
 
+        bindProgress(viewHolder, fileInfo);
+//        // 完成
+//        if (fileInfo.getOver() != null && fileInfo.getOver()) {
+//            viewHolder.flikerbar_item_pdfthree.finishLoad();
+//        } else {
+//            if (fileInfo.getIsDownload()) {
+//                viewHolder.flikerbar_item_pdfthree.processingLoad();
+//            } else {
+//                if (fileInfo.getFinished() != null && fileInfo.getFinished() > 0) {
+//                    viewHolder.flikerbar_item_pdfthree.pauseLoad();
+//                } else {
+//                    viewHolder.flikerbar_item_pdfthree.unBeginLoad();
+//                }
+//            }
+//        }
+    }
+
+    public static void bindProgress(Holder viewHolder, FileInfo fileInfo) {
         if (fileInfo.getFinished() != null && fileInfo.getFinished() > 0 && fileInfo.getLength() != null && fileInfo.getLength() > 0) {
             viewHolder.flikerbar_item_pdfthree.setProgress((int) (((double) fileInfo.getFinished() / (double) fileInfo.getLength()) * 100));
         }
-        // 完成
-        if (fileInfo.getOver() != null && fileInfo.getOver()) {
-            viewHolder.flikerbar_item_pdfthree.finishLoad();
-        } else {
-            if (fileInfo.getIsDownload()) {
+        switch (DownLoadStutasUtil.getDownLoadStatus(fileInfo)) {
+            case DownLoadStutasUtil.DownLoad_Status_waitStart://等待开始
+                viewHolder.flikerbar_item_pdfthree.unBeginLoad();
+                break;
+            case DownLoadStutasUtil.DownLoad_Status_loading://下载中
                 viewHolder.flikerbar_item_pdfthree.processingLoad();
-            } else {
-                if (fileInfo.getFinished() != null && fileInfo.getFinished() > 0) {
-                    viewHolder.flikerbar_item_pdfthree.pauseLoad();
-                } else {
-                    viewHolder.flikerbar_item_pdfthree.unBeginLoad();
-                }
-            }
+                break;
+            case DownLoadStutasUtil.DownLoad_Status_pauseLoad://暂停
+                viewHolder.flikerbar_item_pdfthree.pauseLoad();
+                break;
+            case DownLoadStutasUtil.DownLoad_Status_finished://完成下载
+                viewHolder.flikerbar_item_pdfthree.finishLoad();
+                break;
         }
     }
 
@@ -133,7 +152,8 @@ public class PdfThreeAdapter extends AdvancedAdapter<PdfThreeAdapter.Holder, Thr
                 @Override
                 public void onClick(View v) {
                     if (loderListener != null) {
-                        loderListener.start(fileInfoMap.get(mData.get(getAdpPosition()).getId()), getAdpPosition());
+                        loderListener.start(fileInfoMap.get(mData.get(getAdpPosition()).getId()).getId(), fileInfoMap.get(mData.get(getAdpPosition()).getId()).getUrl()
+                                , fileInfoMap.get(mData.get(getAdpPosition()).getId()).getFileName(), getAdpPosition());
                     }
                 }
             });
@@ -141,7 +161,7 @@ public class PdfThreeAdapter extends AdvancedAdapter<PdfThreeAdapter.Holder, Thr
                 @Override
                 public void onClick(View v) {
                     if (loderListener != null) {
-                        loderListener.stop(fileInfoMap.get(mData.get(getAdpPosition()).getId()), getAdpPosition());
+                        loderListener.stop(fileInfoMap.get(mData.get(getAdpPosition()).getId()).getId(), getAdpPosition());
                     }
                 }
             });
@@ -149,7 +169,7 @@ public class PdfThreeAdapter extends AdvancedAdapter<PdfThreeAdapter.Holder, Thr
                 @Override
                 public void onClick(View v) {
                     if (loderListener != null) {
-                        loderListener.reload(fileInfoMap.get(mData.get(getAdpPosition()).getId()), getAdpPosition());
+                        loderListener.reload(fileInfoMap.get(mData.get(getAdpPosition()).getId()).getId(), getAdpPosition());
                     }
                 }
             });
@@ -157,7 +177,7 @@ public class PdfThreeAdapter extends AdvancedAdapter<PdfThreeAdapter.Holder, Thr
                 @Override
                 public void onClick(View v) {
                     if (loderListener != null) {
-                        loderListener.delete(fileInfoMap.get(mData.get(getAdpPosition()).getId()), getAdpPosition());
+                        loderListener.delete(fileInfoMap.get(mData.get(getAdpPosition()).getId()).getId(), getAdpPosition());
                     }
                 }
             });
@@ -171,12 +191,12 @@ public class PdfThreeAdapter extends AdvancedAdapter<PdfThreeAdapter.Holder, Thr
     }
 
     public interface IDownLoderListener {
-        void start(FileInfo item, int position);
+        void start(String id, String url,String fileName, int position);
 
-        void stop(FileInfo item, int position);
+        void stop(String id, int position);
 
-        void reload(FileInfo item, int position);
+        void reload(String id, int position);
 
-        void delete(FileInfo item, int position);
+        void delete(String id, int position);
     }
 }
