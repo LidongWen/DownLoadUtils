@@ -51,6 +51,8 @@ allprojects {
 
 * 下载设置
  > 设置最大下载文件数量;<br/>
+ > 设置同时最大下载数<br/>
+ > 设置文件下载目录<br/>
  > 支持 Https 设置证书
 
 ##初始化
@@ -148,6 +150,15 @@ DownLoadSetting.getFileInfosByDownLoading();
 ## 获取下载列表（已完成列表）
 ```java
 DownLoadSetting.getFileInfosByFinished();
+```
+
+## 设置同时最大下载数
+```java
+DownLoadSetting.setFileMaxNum(int maxNum)
+```
+## 设置文件下载目录
+```java
+DownLoadSetting.changeFileDir(String fileDir)
 ```
 
 ## 支持 Https
