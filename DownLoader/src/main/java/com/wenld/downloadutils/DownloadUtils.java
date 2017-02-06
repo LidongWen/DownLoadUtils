@@ -97,6 +97,23 @@ public class DownloadUtils {
         return getFileDB().getQueryBuilder().where(ThreadInfoDao.Properties.Over.eq(true)).list();
     }
 
+    public static <T> void startDownload(Context mContext, String id, String url, String fileName, T postion) {
+        FileInfo mFileInfo = new FileInfo();
+        mFileInfo.setUrl(url);
+        mFileInfo.setId(id);
+        mFileInfo.setFileName(fileName);
+        mFileInfo.setMd5(url);
+        startDownload(mContext, mFileInfo, postion);
+    }
+
+    public static <T> void startDownload(Context mContext, String url, String fileName, T postion) {
+        FileInfo mFileInfo = new FileInfo();
+        mFileInfo.setUrl(url);
+        mFileInfo.setId(url);
+        mFileInfo.setFileName(fileName);
+        mFileInfo.setMd5(url);
+        startDownload(mContext, mFileInfo, postion);
+    }
 
     public static <T> void startDownload(Context mContext, FileInfo mFileInfo, T postion) {
         DownLoadBinder.getInstance().startDownload(mContext, mFileInfo, postion);
@@ -110,6 +127,17 @@ public class DownloadUtils {
 //        DownLoadBinder.getInstance().allStop();
     }
 
+    public static <T> void ReDownLoadById(Context mContext, String id, T postion) {
+        FileInfo mFileInfo = new FileInfo();
+        mFileInfo.setId(id);
+        ReDownLoad(mContext, mFileInfo, postion);
+    }
+
+    public static <T> void ReDownLoad(Context mContext, String url, T postion) {
+        FileInfo mFileInfo = new FileInfo();
+        mFileInfo.setId(url);
+        ReDownLoad(mContext, mFileInfo, postion);
+    }
 
     /**
      * 重新下载

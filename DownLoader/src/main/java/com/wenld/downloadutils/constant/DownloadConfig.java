@@ -16,7 +16,7 @@ public class DownloadConfig {
     /**
      * 文件下载后在本地的保存路径
      */
-    public static String destFileDir = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DOWNLOADS + "/多线程断点续传下载";//下载文件目录
+    public static String destFileDir = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DOWNLOADS + "/doenload";//下载文件目录
 
 
     private final static String URL = "http://192.168.254.158:8080/";

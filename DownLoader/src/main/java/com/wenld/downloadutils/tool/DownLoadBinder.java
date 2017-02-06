@@ -95,6 +95,8 @@ public class DownLoadBinder extends Binder implements IDownLoadBinder {
         if (list != null && list.size() > 0) {
             mFileInfo = list.get(0);
             new FileInfoDB().delete(mFileInfo);
+        }else{
+            return;
         }
 
         List<ThreadInfo> threadInfoList = null;

@@ -66,12 +66,21 @@ public class MyApp extends Application {
 }
 ```
 ##下载文件
-
+三种方式
 ```java
   /**
    * 开始下载/继续下载
    */
   DownloadUtils.startDownload(MainActivity.this, item, otherMessage);
+```
+```
+    /**
+    *  自定义ID 的下载
+    **/
+    startDownload(Context mContext, String id, String url, String fileName, T postion);
+```
+```
+   startDownload(Context mContext, String url, String fileName, T postion);
 ```
 ##暂停
 ```java
