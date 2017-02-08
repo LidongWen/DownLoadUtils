@@ -55,7 +55,7 @@ public class PdfThreeAdapter extends AdvancedAdapter<PdfThreeAdapter.Holder, Thr
                     .dontAnimate()
                     .into(viewHolder.iv_item_pdfthree);
             viewHolder.tv_item_pdfthree.setText(StringUtils.processNullStr(item.getFile_name()));
-            viewHolder.tv_memo_item_pdfthree.setText("自定义字段：" + StringUtils.processNullStr(item.getFile_desc()));
+            viewHolder.tv_memo_item_pdfthree.setText(StringUtils.processNullStr(item.getFile_desc()));
             viewHolder.tv_item_pdfthree.setTag(item.getId());
         }
 
@@ -64,20 +64,6 @@ public class PdfThreeAdapter extends AdvancedAdapter<PdfThreeAdapter.Holder, Thr
             return;
 
         bindProgress(viewHolder, fileInfo);
-//        // 完成
-//        if (fileInfo.getOver() != null && fileInfo.getOver()) {
-//            viewHolder.flikerbar_item_pdfthree.finishLoad();
-//        } else {
-//            if (fileInfo.getIsDownload()) {
-//                viewHolder.flikerbar_item_pdfthree.processingLoad();
-//            } else {
-//                if (fileInfo.getFinished() != null && fileInfo.getFinished() > 0) {
-//                    viewHolder.flikerbar_item_pdfthree.pauseLoad();
-//                } else {
-//                    viewHolder.flikerbar_item_pdfthree.unBeginLoad();
-//                }
-//            }
-//        }
     }
 
     public static void bindProgress(Holder viewHolder, FileInfo fileInfo) {
@@ -129,14 +115,6 @@ public class PdfThreeAdapter extends AdvancedAdapter<PdfThreeAdapter.Holder, Thr
 
         public Holder(View rootView) {
             super(rootView);
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if (listener != null) {
-//                        listener.onItemClick(mData.get(getAdpPosition()), getAdpPosition());
-//                    }
-//                }
-//            });
             this.iv_item_pdfthree = (ImageView) rootView.findViewById(R.id.iv_item_pdfthree);
             this.tv_item_pdfthree = (TextView) rootView.findViewById(R.id.tv_item_pdfthree);
             this.tv_memo_item_pdfthree = (TextView) rootView.findViewById(R.id.tv_memo_item_pdfthree);

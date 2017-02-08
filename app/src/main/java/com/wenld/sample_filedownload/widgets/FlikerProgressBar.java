@@ -17,6 +17,8 @@ import android.view.View;
 
 import com.wenld.sample_filedownload.R;
 
+import static android.graphics.Color.parseColor;
+
 
 /**
  * Created by chenliu on 2016/8/26.<br/
@@ -158,7 +160,7 @@ public class FlikerProgressBar extends View implements Runnable {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
+        pgBitmap.eraseColor(parseColor("#00000000"));
 //边框
         drawBorder(canvas);
 
@@ -186,6 +188,12 @@ public class FlikerProgressBar extends View implements Runnable {
         canvas.drawRect(0, 0, getWidth(), getHeight(), bgPaint);
     }
 
+    float right;
+    int tWidth;
+    int tHeight;
+    float xCoordinate;
+    float yCoordinate;
+
     /**
      * 进度
      */
@@ -195,7 +203,7 @@ public class FlikerProgressBar extends View implements Runnable {
         bgPaint.setStrokeWidth(0);
         bgPaint.setColor(progressColor);
 
-        float right = (progress / MAX_PROGRESS) * getMeasuredWidth();
+        right = (progress / MAX_PROGRESS) * getMeasuredWidth();
         pgCanvas.save(Canvas.CLIP_SAVE_FLAG);
 
 //        if (status.equals(processing)) {
@@ -226,10 +234,10 @@ public class FlikerProgressBar extends View implements Runnable {
         textPaint.setColor(progressColor);
         progressText = getProgressText();
         textPaint.getTextBounds(progressText, 0, progressText.length(), textBouds);
-        int tWidth = textBouds.width();
-        int tHeight = textBouds.height();
-        float xCoordinate = (getMeasuredWidth() - tWidth) / 2;
-        float yCoordinate = (getMeasuredHeight() + tHeight) / 2;
+        tWidth = textBouds.width();
+        tHeight = textBouds.height();
+        xCoordinate = (getMeasuredWidth() - tWidth) / 2;
+        yCoordinate = (getMeasuredHeight() + tHeight) / 2;
         canvas.drawText(progressText, xCoordinate, yCoordinate, textPaint);
     }
 
@@ -240,10 +248,10 @@ public class FlikerProgressBar extends View implements Runnable {
      */
     private void drawColorProgressText(Canvas canvas) {
         textPaint.setColor(Color.WHITE);
-        int tWidth = textBouds.width();
-        int tHeight = textBouds.height();
-        float xCoordinate = (getMeasuredWidth() - tWidth) / 2;
-        float yCoordinate = (getMeasuredHeight() + tHeight) / 2;
+        tWidth = textBouds.width();
+        tHeight = textBouds.height();
+        xCoordinate = (getMeasuredWidth() - tWidth) / 2;
+        yCoordinate = (getMeasuredHeight() + tHeight) / 2;
         float progressWidth = (progress / MAX_PROGRESS) * getMeasuredWidth();
         if (progressWidth > xCoordinate) {
             canvas.save(Canvas.CLIP_SAVE_FLAG);
@@ -255,10 +263,8 @@ public class FlikerProgressBar extends View implements Runnable {
     }
 
     public void setProgress(float progress) {
-        if (!isStop) {
-            this.progress = progress;
-            invalidate();
-        }
+        this.progress = progress;
+        invalidate();
     }
 
     public float getProgress() {

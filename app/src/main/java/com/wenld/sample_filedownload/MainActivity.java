@@ -85,45 +85,31 @@ public class MainActivity extends AppCompatActivity {
         adapter.setLoderListener(new PdfThreeAdapter.IDownLoderListener() {
             @Override
             public void start(String id, String url, String fileName, int position) {
-                /**
-                 * 自定义消息
-                 */
+                /**  自定义消息*/
                 OtherMessage otherMessage = new OtherMessage();
                 otherMessage.setPostion(position);
                 otherMessage.setId("1");
-                /**
-                 * 开始下载/继续下载
-                 */
+                /**  开始下载/继续下载*/
                 DownloadUtils.startDownload(MainActivity.this, id, url, fileName, otherMessage);
             }
 
             @Override
             public void stop(String id, int position) {
-                /**
-                 * 暂停下载
-                 */
+                /**  暂停下载 */
                 DownloadUtils.stopById(id);
             }
 
             @Override
             public void reload(String id, int position) {
-                /**
-                 * 自定义消息
-                 */
                 OtherMessage otherMessage = new OtherMessage();
                 otherMessage.setPostion(position);
                 otherMessage.setId("1");
-                /**
-                 *
-                 */
+
                 DownloadUtils.ReDownLoadById(MainActivity.this, id, otherMessage);
             }
 
             @Override
             public void delete(String id, int position) {
-                /**
-                 * 自定义消息
-                 */
                 OtherMessage otherMessage = new OtherMessage();
                 otherMessage.setPostion(position);
                 otherMessage.setId("1");
@@ -207,14 +193,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateUIbyPostion(FileInfo fileInfo, int postion) {
-//        adapter.notifyItemChanged(postion);
         LinearLayoutManager linearManager = (LinearLayoutManager) rlvAty.getLayoutManager();
         //获取最后一个可见view的位置
         int end = linearManager.findLastVisibleItemPosition();
         //获取第一个可见view的位置
         int start = linearManager.findFirstVisibleItemPosition();
         if (postion - start >= 0 && end - postion >= 0) {
-//            adapter.notifyItemChanged(postion);
             View v = rlvAty.getChildAt(postion);
             if (v != null) {
                 PdfThreeAdapter.Holder viewHolder = (PdfThreeAdapter.Holder) rlvAty.getChildViewHolder(v);
