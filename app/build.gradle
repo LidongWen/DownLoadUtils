@@ -30,5 +30,5 @@ dependencies {
 
 //    compile project(':DownLoader')
     compile 'com.github.LidongWen:DownLoadUtils:1.2.0'
-
+    compile 'com.github.LidongWen:ViewSupport:1.0.0'
 }
