@@ -56,6 +56,7 @@ public class MyApp extends Application {
 }
 ```
 ##下载文件
+
 | DownLoadUtils          | direction  |
 | ------------- | :-----:|
 | startDownload(Context mContext, String url, String fileName, T mes) | mes:自定义数据 |
