@@ -64,12 +64,14 @@ public class MyApp extends Application {
 | startDownload(Context mContext, FileInfo mFileInfo, T msg)    |  |
 
 ##暂停
+
 |DownLoadUtils | |
 | ------------- | :-----:|
 | stopById(String id)  |  |
 | stop(FileInfo mFileInfo) |  |
 
 ##继续下载
+
 | DownLoadUtils| |
 | ------------- | :-----:|
 | startDownload(Context mContext, String url, String fileName, T mes) | mes:自定义数据 |
@@ -77,6 +79,7 @@ public class MyApp extends Application {
 | startDownload(Context mContext, FileInfo mFileInfo, T msg)    |  |
 
 ##重新下载
+
 | DownLoadUtils | |
 | ------------- | :-----:|
 | ReDownLoadById(Context mContext, String id, T msg) |  |
@@ -84,6 +87,7 @@ public class MyApp extends Application {
 | ReDownLoad(Context mContext, FileInfo mFileInfo, T msg)  | |
 
 ## 下载时的数据回传监听
+
 实时 获取下载文件的进度,这边通过广播来接收下载进度
 ```java
 /**
